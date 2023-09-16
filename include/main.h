@@ -43,6 +43,7 @@
 //#include "pros/api_legacy.h"
 #include "EZ-Template/api.hpp"
 #include "autons.hpp"
+#include "globals.hpp"
 
 // More includes here...
 //

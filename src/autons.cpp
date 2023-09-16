@@ -1,6 +1,5 @@
 #include "main.h"
 
-
 /////
 // For instalattion, upgrading, documentations and tutorials, check out website!
 // https://ez-robotics.github.io/EZ-Template/
@@ -176,6 +175,9 @@ void swing_example() {
 
 
   chassis.set_swing_pid(ez::RIGHT_SWING, -45, SWING_SPEED);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(20, DRIVE_SPEED, true);
   chassis.wait_drive();
 
   chassis.set_swing_pid(ez::LEFT_SWING, 0, SWING_SPEED);
