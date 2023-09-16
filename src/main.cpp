@@ -1,9 +1,20 @@
 #include "main.h"
-
 /////
 // For instalattion, upgrading, documentations and tutorials, check out website!
 // https://ez-robotics.github.io/EZ-Template/
 /////
+pros::Motor intake_motor(4);	//
+pros::Optical intake_color(17); //
+pros::ADIDigitalOut flaps('G');
+pros::Motor flywheel_motor(9);	 //
+pros::ADIDigitalOut arm('H');
+
+bool flywheel_on = false;
+bool flaps_out = false;
+bool arm_on = false;
+bool intake_running = true;
+bool intake = false;
+bool force_out = false;
 
 // Chassis constructor
 Drive chassis(
@@ -179,13 +190,7 @@ void initialize()
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
-      Auton("Example Drive\n\nDrive forward and come back.", drive_example),
-      Auton("Example Turn\n\nTurn 3 times.", turn_example),
-      Auton("Drive and Turn\n\nDrive forward, turn, come back. ", drive_and_turn),
-      Auton("Drive and Turn\n\nSlow down during drive.", wait_until_change_speed),
-      Auton("Swing Example\n\nSwing, drive, swing.", swing_example),
-      Auton("Combine all 3 movements", combining_movements),
-      Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
+      Auton("starts on enemy side (match loads)", oppton),
   });
 
   // Initialize chassis and auton selector

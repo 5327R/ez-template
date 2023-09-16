@@ -1,5 +1,4 @@
 #include "main.h"
-
 /////
 // For instalattion, upgrading, documentations and tutorials, check out website!
 // https://ez-robotics.github.io/EZ-Template/
@@ -65,6 +64,29 @@ void modified_exit_condition() {
 }
 
 
+
+void oppton() {
+  chassis.set_swing_pid(ez::RIGHT_SWING, -45, SWING_SPEED);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(20, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+  chassis.set_swing_pid(ez::LEFT_SWING, 0, SWING_SPEED);
+  chassis.wait_drive();
+
+  intake_motor.move(127);
+  pros::delay(100);
+
+  chassis.set_drive_pid(-10, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(10, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+  intake_motor.move(0);
+  
+}
 
 ///
 // Drive Example
@@ -172,16 +194,6 @@ void swing_example() {
   // The first parameter is ez::LEFT_SWING or ez::RIGHT_SWING
   // The second parameter is target degrees
   // The third parameter is speed of the moving side of the drive
-
-
-  chassis.set_swing_pid(ez::RIGHT_SWING, -45, SWING_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(20, DRIVE_SPEED, true);
-  chassis.wait_drive();
-
-  chassis.set_swing_pid(ez::LEFT_SWING, 0, SWING_SPEED);
-  chassis.wait_drive();
 
   //chassis.set_swing_pid(ez::RIGHT_SWING, -90, SWING_SPEED);
   //chassis.wait_drive();

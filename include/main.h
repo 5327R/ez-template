@@ -1,3 +1,4 @@
+#pragma once
 /**
  * \file main.h
  *
@@ -43,8 +44,6 @@
 //#include "pros/api_legacy.h"
 #include "EZ-Template/api.hpp"
 #include "autons.hpp"
-#include "globals.hpp"
-
 // More includes here...
 //
 // . . .
@@ -86,3 +85,16 @@ void opcontrol(void);
 #endif
 
 #endif  // _PROS_MAIN_H_
+
+extern pros::Motor intake_motor;	//
+extern pros::Optical intake_color; //
+extern pros::ADIDigitalOut flaps;
+extern pros::Motor flywheel_motor;	 //
+extern pros::ADIDigitalOut arm;
+
+extern bool flywheel_on;
+extern bool flaps_out;
+extern bool arm_on;
+extern bool intake_running;
+extern bool intake;
+extern bool force_out;
