@@ -96,5 +96,5 @@ extern bool flywheel_on;
 extern bool flaps_out;
 extern bool arm_on;
 extern bool intake_running;
-extern bool intake;
+extern bool intake_in;
 extern bool force_out;

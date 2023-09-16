@@ -4,7 +4,10 @@
 
 extern Drive chassis;
 
+void oppsteal();
 void oppton();
+
+void friendlyton();
 
 void drive_example();
 void turn_example();

@@ -12,8 +12,10 @@ pros::ADIDigitalOut arm('H');
 bool flywheel_on = false;
 bool flaps_out = false;
 bool arm_on = false;
-bool intake_running = true;
-bool intake = false;
+// true
+bool intake_running = false;
+// false
+bool intake_in = true;
 bool force_out = false;
 
 // Chassis constructor
@@ -85,11 +87,11 @@ Drive chassis(
 
 void run_intake()
 {
-  if (intake_running && intake)
+  if (intake_running && intake_in)
   {
     if (intake_color.get_proximity() == 255)
     {
-      intake = false;
+      intake_in = false;
       intake_running = false;
       pros::delay(100);
       intake_motor.move(0);
@@ -99,11 +101,11 @@ void run_intake()
       intake_motor.move(-127);
     }
   }
-  else if (intake_running && !intake)
+  else if (intake_running && !intake_in)
   {
     if (intake_color.get_proximity() < 255)
     {
-      intake = true;
+      intake_in = true;
       intake_running = false;
       intake_motor.move(0);
     }
@@ -190,7 +192,9 @@ void initialize()
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
-      Auton("starts on enemy side (match loads)", oppton),
+      // Auton("right side ABSOLUTE CLASSIC", friendlyton),
+      // Auton("starts on enemy side (match loads)", oppton),
+      Auton("left side (with matchload and push center ball to other side)", oppsteal)
   });
 
   // Initialize chassis and auton selector
@@ -272,7 +276,7 @@ void opcontrol()
     // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
     // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
     // Intake
-    if (master.get_digital(DIGITAL_R1))
+    if (master.get_digital_new_press(DIGITAL_R1))
     {
       force_out = false;
       intake_running = true;
@@ -284,7 +288,7 @@ void opcontrol()
       force_out = !force_out;
     }
 
-    if (master.get_digital(DIGITAL_B))
+    if (master.get_digital_new_press(DIGITAL_B))
     {
       intake_running = false;
       force_out = false;

@@ -63,28 +63,188 @@ void modified_exit_condition() {
   chassis.set_exit_condition(chassis.drive_exit, 80, 50, 300, 150, 500, 500);
 }
 
+void oppsteal() {
+  chassis.set_swing_pid(ez::RIGHT_SWING, -45, SWING_SPEED);
+  chassis.wait_drive();
 
+  chassis.set_drive_pid(17, DRIVE_SPEED, true);
+  chassis.wait_drive();
+  
+  chassis.set_swing_pid(ez::LEFT_SWING, 0, 127);
+  pros::delay(200);
+  intake_motor.move(127);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-3, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(11, 127, true);
+  chassis.wait_drive();
+
+  intake_motor.move(0);
+
+  chassis.set_swing_pid(ez::LEFT_SWING, -50, 127);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-20, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+  chassis.set_swing_pid(ez::RIGHT_SWING, 0, 127);
+  chassis.wait_drive();
+
+  chassis.set_turn_pid(20, TURN_SPEED);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(40, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+  chassis.set_turn_pid(0, TURN_SPEED);
+  chassis.wait_drive();
+
+  intake_motor.move(-127);
+  chassis.set_drive_pid(10, DRIVE_SPEED, true);
+  chassis.wait_drive();
+  pros::delay(500);
+
+  chassis.set_drive_pid(-4, DRIVE_SPEED, true);
+  chassis.wait_drive();
+  intake_motor.move(0);
+
+  chassis.set_turn_pid(-90, TURN_SPEED);
+  chassis.wait_drive();
+
+  flaps.set_value(true);
+  chassis.set_drive_pid(-20, 127, false);
+  chassis.wait_drive();
+
+  flaps.set_value(false);
+
+}
+
+void friendlyton() {
+  chassis.set_swing_pid(ez::LEFT_SWING, 45, SWING_SPEED);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(17, DRIVE_SPEED, true);
+  chassis.wait_drive();
+  
+  chassis.set_swing_pid(ez::RIGHT_SWING, 0, 127);
+  pros::delay(200);
+  intake_motor.move(127);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-3, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(8, 127, true);
+  chassis.wait_drive();
+
+  intake_motor.move(0);
+
+  chassis.set_drive_pid(-7, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+  chassis.set_turn_pid(-69, TURN_SPEED);
+  chassis.wait_drive();
+  //47
+  chassis.set_drive_pid(47, DRIVE_SPEED, true);
+  intake_motor.move(-127);
+  chassis.wait_drive();
+  //0
+  chassis.set_turn_pid(17, TURN_SPEED);
+  chassis.wait_drive();
+  
+  // chassis.set_drive_pid(17, DRIVE_SPEED, false);
+  // chassis.wait_drive();
+
+  // chassis.set_swing_pid(ez::LEFT_SWING, 90, 80);
+  // chassis.wait_drive();
+
+  chassis.set_drive_pid(17, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+  chassis.set_swing_pid(ez::LEFT_SWING, 90, 70);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(16, 127, true);
+  intake_motor.move(127);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-10, 127, true);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(10, 127, true);
+  chassis.wait_drive();
+
+  intake_motor.move(0);
+
+  chassis.set_drive_pid(-5, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+  chassis.set_turn_pid(-78, TURN_SPEED);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(25, DRIVE_SPEED, true);
+  intake_motor.move(-127);
+  chassis.wait_drive();
+
+  chassis.set_turn_pid(100, TURN_SPEED);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(27, DRIVE_SPEED, true);
+  intake_motor.move(127);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-10, 127, true);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(10, 127, true);
+  chassis.wait_drive();
+
+  intake_motor.move(0);
+
+  // chassis.set_swing_pid(ez::LEFT_SWING, 90, SWING_SPEED);
+  // chassis.wait_drive();
+
+  // intake_motor.move(127);
+  // chassis.wait_drive();
+
+
+}
 
 void oppton() {
   chassis.set_swing_pid(ez::RIGHT_SWING, -45, SWING_SPEED);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(20, DRIVE_SPEED, true);
+  chassis.set_drive_pid(17, DRIVE_SPEED, true);
   chassis.wait_drive();
-
-  chassis.set_swing_pid(ez::LEFT_SWING, 0, SWING_SPEED);
-  chassis.wait_drive();
-
+  
+  chassis.set_swing_pid(ez::LEFT_SWING, 0, 127);
+  pros::delay(200);
   intake_motor.move(127);
-  pros::delay(100);
-
-  chassis.set_drive_pid(-10, DRIVE_SPEED, true);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(10, DRIVE_SPEED, true);
+  chassis.set_drive_pid(-3, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(10, 127, true);
   chassis.wait_drive();
 
   intake_motor.move(0);
+
+  chassis.set_swing_pid(ez::LEFT_SWING, -45, 127);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-23, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+  chassis.set_swing_pid(ez::LEFT_SWING, -90, 127);
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-36, DRIVE_SPEED, true);
+  chassis.wait_drive();
+
+
   
 }
 
@@ -183,6 +343,10 @@ void wait_until_change_speed() {
   chassis.wait_until(-6);
   chassis.set_max_speed(40); // After driving 6 inches at DRIVE_SPEED, the robot will go the remaining distance at 40 speed
   chassis.wait_drive();
+}
+
+void prog_skills() {
+  intake_motor.move(127);
 }
 
 
