@@ -10,11 +10,11 @@
 Drive chassis (
   // Left Chassis Ports (negative port will reverse it!)
   //   the first port is the sensored port (when trackers are not used!)
-  {13, 11, 3}
+  {-13, -11, -3}
 
   // Right Chassis Ports (negative port will reverse it!)
   //   the first port is the sensored port (when trackers are not used!)
-  ,{-8, -6, -20}
+  ,{8, 6, 20}
 
   // IMU Port
   ,14
@@ -74,20 +74,20 @@ void initialize() {
   // chassis.set_left_curve_buttons (pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT); // If using tank, only the left side is used. 
   // chassis.set_right_curve_buttons(pros::E_CONTROLLER_DIGITAL_Y,    pros::E_CONTROLLER_DIGITAL_A);
 
-  // // Autonomous Selector using LLEMU
-  // ez::as::auton_selector.add_autons({
-  //   Auton("Example Drive\n\nDrive forward and come back.", drive_example),
-  //   Auton("Example Turn\n\nTurn 3 times.", turn_example),
-  //   Auton("Drive and Turn\n\nDrive forward, turn, come back. ", drive_and_turn),
-  //   Auton("Drive and Turn\n\nSlow down during drive.", wait_until_change_speed),
-  //   Auton("Swing Example\n\nSwing, drive, swing.", swing_example),
-  //   Auton("Combine all 3 movements", combining_movements),
-  //   Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
-  // });
+  // Autonomous Selector using LLEMU
+  ez::as::auton_selector.add_autons({
+    Auton("Example Drive\n\nDrive forward and come back.", drive_example),
+    Auton("Example Turn\n\nTurn 3 times.", turn_example),
+    Auton("Drive and Turn\n\nDrive forward, turn, come back. ", drive_and_turn),
+    Auton("Drive and Turn\n\nSlow down during drive.", wait_until_change_speed),
+    Auton("Swing Example\n\nSwing, drive, swing.", swing_example),
+    Auton("Combine all 3 movements", combining_movements),
+    Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example),
+  });
 
   // Initialize chassis and auton selector
   chassis.initialize();
-  //ez::as::initialize();
+  ez::as::initialize();
 }
 
 
@@ -135,9 +135,9 @@ void autonomous() {
   chassis.reset_drive_sensor(); // Reset drive sensors to 0
   chassis.set_drive_brake(MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
 
-  //ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
+  ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
 
-  drive_example();
+  //drive_example();
 }
 
 
@@ -156,21 +156,21 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-  // // This is preference to what you like to drive on.
-  // chassis.set_drive_brake(MOTOR_BRAKE_COAST);
+  // This is preference to what you like to drive on.
+  chassis.set_drive_brake(MOTOR_BRAKE_COAST);
 
-  // while (true) {
+  while (true) {
 
-  //   chassis.tank(); // Tank control
-  //   // chassis.arcade_standard(ez::SPLIT); // Standard split arcade
-  //   // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
-  //   // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
-  //   // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
+    //chassis.tank(); // Tank control
+    chassis.arcade_standard(ez::SPLIT); // Standard split arcade
+    // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
+    //chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
+    // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
 
-  //   // . . .
-  //   // Put more user control code here!
-  //   // . . .
+    // . . .
+    // Put more user control code here!
+    // . . .
 
-  //   pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
-  // }
+    pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
+  }
 }
