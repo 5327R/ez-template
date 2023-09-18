@@ -192,9 +192,12 @@ void initialize()
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
-      // Auton("right side ABSOLUTE CLASSIC", friendlyton),
-      // Auton("starts on enemy side (match loads)", oppton),
-      Auton("left side (with matchload and push center ball to other side)", oppsteal)
+      Auton("(friendlyton) right side ABSOLUTE CLASSIC", friendlyton), 
+      Auton("(oppsteal) left side (with matchload and push center ball to other side)", oppsteal),
+      Auton("(oppton) starts on enemy side (match loads)", oppton),
+      Auton("(ProgSkills) Just runs flywheel the whole time.", skillsProg),
+      
+      
   });
 
   // Initialize chassis and auton selector
@@ -245,8 +248,6 @@ void autonomous()
   chassis.set_drive_brake(MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
 
   ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
-
-  // drive_example();
 }
 
 /**

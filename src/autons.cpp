@@ -248,6 +248,11 @@ void oppton() {
   
 }
 
+void skillsProg() {
+  arm.set_value(true);
+  flywheel_motor.move(127);
+}
+
 ///
 // Drive Example
 ///
@@ -345,9 +350,6 @@ void wait_until_change_speed() {
   chassis.wait_drive();
 }
 
-void prog_skills() {
-  intake_motor.move(127);
-}
 
 
 
