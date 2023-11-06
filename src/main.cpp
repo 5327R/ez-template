@@ -4,34 +4,36 @@
 // https://ez-robotics.github.io/EZ-Template/
 /////
 pros::Motor intake_motor(4);	//
-pros::Optical intake_color(17); //
-pros::ADIDigitalOut flaps('G');
-pros::Motor flywheel_motor(9);	 //
-pros::ADIDigitalOut arm('H');
+pros::ADIDigitalOut flaps('A');
+pros::Motor slapper_motor(-10);	 //
+pros::ADIDigitalOut blocker('C');
 
-bool flywheel_on = false;
+bool slapper_on = false;
 bool flaps_out = false;
-bool arm_on = false;
+bool blocker_on = false;
 // true
 bool intake_running = false;
 // false
 bool intake_in = true;
-bool force_out = false;
+//bool force_out = false;
+
+bool intake = false;
+bool outtake = false;
 
 // Chassis constructor
 Drive chassis(
     // Left Chassis Ports (negative port will reverse it!)
     //   the first port is the sensored port (when trackers are not used!)
-    {-13, -11, -3}
+    {-15, -17, -6}
 
     // Right Chassis Ports (negative port will reverse it!)
     //   the first port is the sensored port (when trackers are not used!)
     ,
-    {8, 6, 20}
+    {19, 18, 3}
 
     // IMU Port
     ,
-    14
+    7
 
     // Wheel Diameter (Remember, 4" wheels are actually 4.125!)
     //    (or tracking wheel diameter)
@@ -68,59 +70,21 @@ Drive chassis(
 
 // Subsystems
 // --------------------------------------------------------------------------------------------------------------------------------
-// void run_intake()
-// {
-// 	if (master.get_digital_new_press(DIGITAL_R1))
-// 	{
-// 		intake_motor.move_velocity(intake_in ? 0 : -600);
-// 		intake_in = !intake_in;
-// 		intake_out = false;
-// 	}
 
-// 	if (master.get_digital_new_press(DIGITAL_R2))
-// 	{
-// 		intake_motor.move_velocity(intake_out ? 0 : 600);
-// 		intake_out = !intake_out;
-// 		intake_in = false;
-// 	}
-// }
-
-void run_intake()
-{
-  if (intake_running && intake_in)
-  {
-    if (intake_color.get_proximity() == 255)
-    {
-      intake_in = false;
-      intake_running = false;
-      pros::delay(100);
-      intake_motor.move(0);
-    }
-    else
-    {
-      intake_motor.move(-127);
-    }
-  }
-  else if (intake_running && !intake_in)
-  {
-    if (intake_color.get_proximity() < 255)
-    {
-      intake_in = true;
-      intake_running = false;
-      intake_motor.move(0);
-    }
-    else
-    {
-      intake_motor.move(127);
-    }
-  }
-  else if (force_out)
-  {
-    intake_motor.move(127);
-  }
-  else
-  {
+void run_intake(bool in) {
+  if (intake_running && (in == intake_in)) {
     intake_motor.move(0);
+    intake_running = false;
+  }
+  else if (in) {
+    intake_motor.move(-127);
+    intake_running = true;
+    intake_in = true;
+  }
+  else {
+    intake_motor.move(127);
+    intake_running = true;
+    intake_in = false;
   }
 }
 
@@ -138,31 +102,34 @@ void move_flaps()
   }
 }
 
-void run_flywheel(int voltage)
+void run_slapper()
 {
-  flywheel_on = !flywheel_on;
+  if (!blocker_on){
+    return;
+  }
+  slapper_on = !slapper_on;
 
-  if (flywheel_on)
+  if (slapper_on)
   {
-    flywheel_motor.move(voltage);
+    slapper_motor.move(127);
   }
   else
   {
-    flywheel_motor.move(0);
+    slapper_motor.move(0);
   }
 }
 
-void set_arm()
+void set_blocker()
 {
-  arm_on = !arm_on;
+  blocker_on = !blocker_on;
 
-  if (arm_on)
+  if (blocker_on)
   {
-    arm.set_value(true);
+    blocker.set_value(true);
   }
   else
   {
-    arm.set_value(false);
+    blocker.set_value(false);
   }
 }
 
@@ -193,9 +160,9 @@ void initialize()
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.add_autons({
       Auton("(friendlyton) right side ABSOLUTE CLASSIC", friendlyton), 
-      Auton("(oppsteal) left side (with matchload and push center ball to other side)", oppsteal),
-      Auton("(oppton) starts on enemy side (match loads)", oppton),
-      Auton("(ProgSkills) Just runs flywheel the whole time.", skillsProg),
+      //Auton("(oppsteal) left side (with matchload and push center ball to other side)", oppsteal),
+      //Auton("(oppton) starts on enemy side (match loads)", oppton),
+      //Auton("(ProgSkills) Just runs flywheel the whole time.", skillsProg),
       
       
   });
@@ -247,7 +214,12 @@ void autonomous()
   chassis.reset_drive_sensor();              // Reset drive sensors to 0
   chassis.set_drive_brake(MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
 
-  ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
+  //drive_example();
+  //ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
+  std::cout << "hello";
+  //drive_example();
+  friendlyton();
+  //skillsProg();
 }
 
 /**
@@ -268,7 +240,7 @@ void opcontrol()
   // This is preference to what you like to drive on.
   chassis.set_drive_brake(MOTOR_BRAKE_COAST);
 
-  while (true)
+  while(true)
   {
 
     // chassis.tank(); // Tank control
@@ -276,26 +248,16 @@ void opcontrol()
     // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
     // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
     // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
+
     // Intake
     if (master.get_digital_new_press(DIGITAL_R1))
     {
-      force_out = false;
-      intake_running = true;
+      run_intake(true);
     }
-
     if (master.get_digital_new_press(DIGITAL_R2))
     {
-      intake_running = false;
-      force_out = !force_out;
+      run_intake(false);
     }
-
-    if (master.get_digital_new_press(DIGITAL_B))
-    {
-      intake_running = false;
-      force_out = false;
-    }
-
-    run_intake();
 
     // Flaps
     if (master.get_digital_new_press(DIGITAL_A))
@@ -305,17 +267,12 @@ void opcontrol()
 
     if (master.get_digital_new_press(DIGITAL_L1))
     {
-      run_flywheel(-127);
-    }
-
-    if (master.get_digital_new_press(DIGITAL_L2))
-    {
-      run_flywheel(127);
+      run_slapper();
     }
 
     if (master.get_digital_new_press(DIGITAL_Y))
     {
-      set_arm();
+      set_blocker();
     }
 
     pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME

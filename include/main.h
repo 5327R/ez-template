@@ -89,8 +89,8 @@ void opcontrol(void);
 extern pros::Motor intake_motor;	//
 extern pros::Optical intake_color; //
 extern pros::ADIDigitalOut flaps;
-extern pros::Motor flywheel_motor;	 //
-extern pros::ADIDigitalOut arm;
+extern pros::ADIDigitalOut blocker;
+extern pros::Motor slapper_motor;
 
 extern bool flywheel_on;
 extern bool flaps_out;

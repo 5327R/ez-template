@@ -24,9 +24,9 @@ const int SWING_SPEED = 90;
 void default_constants() {
   chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
-  chassis.set_pid_constants(&chassis.headingPID, 11, 0, 20, 0);
-  chassis.set_pid_constants(&chassis.forward_drivePID, 1, 0, 7, 0);
-  chassis.set_pid_constants(&chassis.backward_drivePID, 1, 0, 7, 0);
+  chassis.set_pid_constants(&chassis.headingPID, 20, 0, 20, 0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 1.25, 0, 6.7, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 1.25, 0, 6.7, 0);
   chassis.set_pid_constants(&chassis.turnPID, 10, 0, 75, 15);
   chassis.set_pid_constants(&chassis.swingPID, 10, 0, 75, 0);
 }
@@ -103,7 +103,7 @@ void oppsteal() {
 }
 
 void friendlyton() {
-  chassis.set_swing_pid(ez::LEFT_SWING, 45, SWING_SPEED);
+  chassis.set_swing_pid(ez::LEFT_SWING, 45, 100);
   chassis.wait_drive();
 
   chassis.set_drive_pid(17, DRIVE_SPEED, true);
@@ -156,7 +156,7 @@ void friendlyton() {
   chassis.set_drive_pid(-5, DRIVE_SPEED, true);
   chassis.wait_drive();
 
-  chassis.set_turn_pid(-78, TURN_SPEED);
+  chassis.set_turn_pid(-90, TURN_SPEED);
   chassis.wait_drive();
 
   chassis.set_drive_pid(25, DRIVE_SPEED, true);
@@ -224,8 +224,31 @@ void oppton() {
 }
 
 void skillsProg() {
-  arm.set_value(true);
-  flywheel_motor.move(127);
+  // open blocker
+  chassis.set_angle(-45);
+  blocker.set_value(true);
+  pros::delay(1000);
+  // turn on slapper for 5 sec
+  slapper_motor.move(127);
+  pros::delay(99999);
+  slapper_motor.move(0);
+
+
+  // // run intake for 0.5 seconds as warning
+  // intake_motor.move(127);
+  // pros::delay(500); 
+  // intake_motor.move(0);
+
+  // // swing
+  // chassis.set_swing_pid(ez::LEFT_SWING, 0, SWING_SPEED);
+  // chassis.wait_drive();
+
+  // chassis.set_drive_pid(72, DRIVE_SPEED, true);
+  // chassis.wait_drive();
+
+  // chassis.set_swing_pid(ez::RIGHT_SWING, -90, SWING_SPEED);
+  // chassis.wait_drive();
+  
 }
 
 ///
@@ -236,7 +259,7 @@ void drive_example() {
   // The second parameter is max speed the robot will drive at
   // The third parameter is a boolean (true or false) for enabling/disabling a slew at the start of drive motions
   // for slew, only enable it when the drive distance is greater then the slew distance + a few inches
-
+  default_constants();
 
   // chassis.set_drive_pid(24, DRIVE_SPEED, true);
   // chassis.wait_drive();
@@ -244,12 +267,27 @@ void drive_example() {
   // chassis.set_drive_pid(-12, DRIVE_SPEED);
   // chassis.wait_drive();
 
-  // chassis.set_drive_pid(-12, DRIVE_SPEED);
-  // //chassis.wait_drive();
-
-  // chassis.set_turn_pid(360, TURN_SPEED);
+  // chassis.set_drive_pid(-24, DRIVE_SPEED);
   // chassis.wait_drive();
-  swing_example();
+
+  // chassis.set_turn_pid(90, TURN_SPEED);
+  // chassis.wait_drive();
+
+  // chassis.set_turn_pid(45, TURN_SPEED);
+  // chassis.wait_drive();
+
+  // chassis.set_turn_pid(0, TURN_SPEED);
+  // chassis.wait_drive();
+
+  // Swing
+  chassis.set_swing_pid(ez::LEFT_SWING, 90, SWING_SPEED);
+  chassis.wait_drive();
+
+  // chassis.set_drive_pid(24, DRIVE_SPEED, true);
+  // chassis.wait_until(12);
+
+  chassis.set_swing_pid(ez::LEFT_SWING, 0, SWING_SPEED);
+  chassis.wait_drive();
 }
 
 
