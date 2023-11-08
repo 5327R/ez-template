@@ -230,24 +230,25 @@ void skillsProg() {
   pros::delay(1000);
   // turn on slapper for 5 sec
   slapper_motor.move(127);
-  pros::delay(99999);
+  pros::delay(30000);
   slapper_motor.move(0);
+  blocker.set_value(false);
 
 
-  // // run intake for 0.5 seconds as warning
-  // intake_motor.move(127);
-  // pros::delay(500); 
-  // intake_motor.move(0);
+  // run intake for 0.5 seconds as warning
+  intake_motor.move(127);
+  pros::delay(500); 
+  intake_motor.move(0);
 
-  // // swing
-  // chassis.set_swing_pid(ez::LEFT_SWING, 0, SWING_SPEED);
-  // chassis.wait_drive();
+  // swing
+  chassis.set_swing_pid(ez::LEFT_SWING, 0, SWING_SPEED);
+  chassis.wait_drive();
 
-  // chassis.set_drive_pid(72, DRIVE_SPEED, true);
-  // chassis.wait_drive();
+  chassis.set_drive_pid(72, DRIVE_SPEED, true);
+  chassis.wait_drive();
 
-  // chassis.set_swing_pid(ez::RIGHT_SWING, -90, SWING_SPEED);
-  // chassis.wait_drive();
+  chassis.set_swing_pid(ez::RIGHT_SWING, -90, SWING_SPEED);
+  chassis.wait_drive();
   
 }
 

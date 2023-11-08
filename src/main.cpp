@@ -133,6 +133,10 @@ void set_blocker()
   }
 }
 
+
+// Game Loop Functions
+// --------------------------------------------------------------------------------------------------------------------------------
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -214,12 +218,11 @@ void autonomous()
   chassis.reset_drive_sensor();              // Reset drive sensors to 0
   chassis.set_drive_brake(MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
 
-  //drive_example();
   //ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
-  std::cout << "hello";
+  std::cout << "Autonomous Has Run";
   //drive_example();
-  friendlyton();
-  //skillsProg();
+  //friendlyton();
+  skillsProg();
 }
 
 /**
