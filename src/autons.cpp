@@ -1,4 +1,14 @@
 #include "main.h"
+#define swing_l(x) do { chassis.set_swing_pid(ez::LEFT_SWING, x, SWING_SPEED); chassis.wait_drive(); } while(0)
+#define swingl_s(x, y) do { chassis.set_swing_pid(ez::LEFT_SWING, x, y); chassis.wait_drive(); } while(0)
+#define swing_r(x) do { chassis.set_swing_pid(ez::RIGHT_SWING, x, SWING_SPEED); chassis.wait_drive(); } while(0)
+#define swingr_s(x, y) do { chassis.set_swing_pid(ez::RIGHT_SWING, x, y); chassis.wait_drive(); } while(0)
+
+#define turn(x) do { chassis.set_turn_pid(x, TURN_SPEED); chassis.wait_drive(); } while(0)
+#define turn_s(x, y) do { chassis.set_turn_pid(x, y); chassis.wait_drive(); } while(0)
+#define drive(x) do { chassis.set_drive_pid(x, DRIVE_SPEED, true); chassis.wait_drive(); } while(0)
+#define drive_s(x, y) do { chassis.set_drive_pid(x, y, true); chassis.wait_drive(); } while(0)
+
 /////
 // For instalattion, upgrading, documentations and tutorials, check out website!
 // https://ez-robotics.github.io/EZ-Template/
@@ -225,30 +235,44 @@ void oppton() {
 
 void skillsProg() {
   // open blocker
-  chassis.set_angle(-45);
-  blocker.set_value(true);
-  pros::delay(1000);
-  // turn on slapper for 5 sec
-  slapper_motor.move(127);
-  pros::delay(30000);
-  slapper_motor.move(0);
-  blocker.set_value(false);
-
-
-  // run intake for 0.5 seconds as warning
+  chassis.set_angle(-90);
+  drive(12);
+  swing_l(-45);
+  drive(12);
+  swing_l(0);
+  drive(24);
   intake_motor.move(127);
-  pros::delay(500); 
-  intake_motor.move(0);
+  drive(-36);
 
-  // swing
-  chassis.set_swing_pid(ez::LEFT_SWING, 0, SWING_SPEED);
-  chassis.wait_drive();
 
-  chassis.set_drive_pid(72, DRIVE_SPEED, true);
-  chassis.wait_drive();
+  // chassis.set_swing_pid(ez::LEFT_SWING, -45, SWING_SPEED);
+  // chassis.wait_drive();
 
-  chassis.set_swing_pid(ez::RIGHT_SWING, -90, SWING_SPEED);
-  chassis.wait_drive();
+
+  // // After lined up with pipe
+  // blocker.set_value(true);
+  // pros::delay(1000);
+  // // turn on slapper for 5 sec
+  // slapper_motor.move(127);
+  // pros::delay(5000);
+  // slapper_motor.move(0);
+  // blocker.set_value(false);
+
+
+  // // run intake for 0.5 seconds as warning
+  // intake_motor.move(127);
+  // pros::delay(500); 
+  // intake_motor.move(0);
+
+  // // swing
+  // chassis.set_swing_pid(ez::LEFT_SWING, 0, SWING_SPEED);
+  // chassis.wait_drive();
+
+  // chassis.set_drive_pid(72, DRIVE_SPEED, true);
+  // chassis.wait_drive();
+
+  // chassis.set_swing_pid(ez::RIGHT_SWING, -90, SWING_SPEED);
+  // chassis.wait_drive();
   
 }
 
