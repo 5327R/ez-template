@@ -136,6 +136,13 @@ void set_blocker()
 
 // Game Loop Functions
 // --------------------------------------------------------------------------------------------------------------------------------
+void debugDataTask() {
+  while (true){
+    std::cout << chassis.imu.get_heading() << std::endl;
+    //std::cout << "I love kevin\n";
+    pros::delay(100);
+  }
+}
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -157,6 +164,7 @@ void initialize()
   default_constants();                               // Set the drive to your own constants from autons.cpp!
   exit_condition_defaults();                         // Set the exit conditions to your own constants from autons.cpp!
 
+  pros::Task dataTask(debugDataTask);
   // These are already defaulted to these buttons, but you can change the left/right curve buttons here!
   // chassis.set_left_curve_buttons (pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT); // If using tank, only the left side is used.
   // chassis.set_right_curve_buttons(pros::E_CONTROLLER_DIGITAL_Y,    pros::E_CONTROLLER_DIGITAL_A);
@@ -168,7 +176,7 @@ void initialize()
       //Auton("(oppton) starts on enemy side (match loads)", oppton),
       //Auton("(ProgSkills) Just runs flywheel the whole time.", skillsProg),
       
-      
+  
   });
 
   // Initialize chassis and auton selector
@@ -221,9 +229,11 @@ void autonomous()
   //ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
   std::cout << "Autonomous Has Run";
   //drive_example();
-  //friendlyton();
-  skillsProg();
+  friendlyton();
+  //skillsProg();
 }
+
+
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -245,7 +255,6 @@ void opcontrol()
 
   while(true)
   {
-
     // chassis.tank(); // Tank control
     chassis.arcade_standard(ez::SPLIT); // Standard split arcade
     // chassis.arcade_standard(ez::SINGLE); // Standard single arcade

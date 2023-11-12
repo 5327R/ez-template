@@ -235,14 +235,13 @@ void oppton() {
 
 void skillsProg() {
   // open blocker
-  chassis.set_angle(-90);
-  drive(12);
-  swing_l(-45);
-  drive(12);
+  chassis.set_angle(0);
+  swing_r(-45);
+  drive(20);
   swing_l(0);
   drive(24);
-  intake_motor.move(127);
-  drive(-36);
+  drive(-24);
+  turn(45);
 
 
   // chassis.set_swing_pid(ez::LEFT_SWING, -45, SWING_SPEED);
