@@ -15,7 +15,7 @@
 /////
 
 
-const int DRIVE_SPEED = 110; // This is 110/127 (around 87% of max speed).  We don't suggest making this 127.
+const int DRIVE_SPEED = 100; // This is 110/127 (around 87% of max speed).  We don't suggest making this 127.
                              // If this is 127 and the robot tries to heading correct, it's only correcting by
                              // making one side slower.  When this is 87%, it's correcting by making one side
                              // faster and one side slower, giving better heading correction.
@@ -35,8 +35,8 @@ void default_constants() {
   chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
   chassis.set_pid_constants(&chassis.headingPID, 20, 0, 20, 0);
-  chassis.set_pid_constants(&chassis.forward_drivePID, 1.25, 0, 6.7, 0);
-  chassis.set_pid_constants(&chassis.backward_drivePID, 1.25, 0, 6.7, 0);
+  chassis.set_pid_constants(&chassis.forward_drivePID, 1, 0, 6.7, 0);
+  chassis.set_pid_constants(&chassis.backward_drivePID, 1, 0, 6.7, 0);
   chassis.set_pid_constants(&chassis.turnPID, 10, 0, 75, 15);
   chassis.set_pid_constants(&chassis.swingPID, 10, 0, 75, 0);
 }
@@ -113,7 +113,7 @@ void oppsteal() {
 }
 
 void friendlyton() {
-  chassis.set_swing_pid(ez::LEFT_SWING, 45, 100);
+  chassis.set_swing_pid(ez::LEFT_SWING, 45, 127);
   chassis.wait_drive();
 
   chassis.set_drive_pid(17, DRIVE_SPEED, true);
@@ -148,7 +148,7 @@ void friendlyton() {
   chassis.set_drive_pid(17, DRIVE_SPEED, true);
   chassis.wait_drive();
 
-  chassis.set_swing_pid(ez::LEFT_SWING, 90, 70);
+  chassis.set_swing_pid(ez::LEFT_SWING, 90, 60);
   chassis.wait_drive();
 
   chassis.set_drive_pid(16, 127, true);
@@ -285,15 +285,21 @@ void drive_example() {
   // for slew, only enable it when the drive distance is greater then the slew distance + a few inches
   default_constants();
 
-  // chassis.set_drive_pid(24, DRIVE_SPEED, true);
+  // Drive forward and back
+  chassis.set_drive_pid(24, DRIVE_SPEED, true);
+  pros::delay(500);
+
+  chassis.set_turn_pid(90, TURN_SPEED);
+  chassis.wait_drive();
+
+  // chassis.set_drive_pid(-24, 127);
   // chassis.wait_drive();
 
-  // chassis.set_drive_pid(-12, DRIVE_SPEED);
+  // chassis.set_drive_pid(-24, 127);
   // chassis.wait_drive();
 
-  // chassis.set_drive_pid(-24, DRIVE_SPEED);
-  // chassis.wait_drive();
 
+  // // Turn
   // chassis.set_turn_pid(90, TURN_SPEED);
   // chassis.wait_drive();
 
@@ -303,15 +309,15 @@ void drive_example() {
   // chassis.set_turn_pid(0, TURN_SPEED);
   // chassis.wait_drive();
 
-  // Swing
-  chassis.set_swing_pid(ez::LEFT_SWING, 90, SWING_SPEED);
-  chassis.wait_drive();
+  // // Swing
+  // chassis.set_swing_pid(ez::LEFT_SWING, 90, 127);
+  // chassis.wait_drive();
 
   // chassis.set_drive_pid(24, DRIVE_SPEED, true);
   // chassis.wait_until(12);
 
-  chassis.set_swing_pid(ez::LEFT_SWING, 0, SWING_SPEED);
-  chassis.wait_drive();
+  // chassis.set_swing_pid(ez::LEFT_SWING, 0, 127);
+  // chassis.wait_drive();
 }
 
 
