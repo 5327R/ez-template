@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import sys
 # Initialize the x and y data lists
 x_data = []
 y_data = []
@@ -19,7 +19,7 @@ plt.ion()  # Turn on interactive mode for real-time plotting
 update_plot()
 
 while True:
-    user_input = input("Enter a value (or type 'exit' to quit): ")
+    user_input = input()
     if user_input.lower() == 'exit':
         break
     try:
