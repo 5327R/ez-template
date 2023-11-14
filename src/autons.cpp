@@ -1,13 +1,14 @@
 #include "main.h"
-#define swing_l(x) do { chassis.set_swing_pid(ez::LEFT_SWING, x, SWING_SPEED); chassis.wait_drive(); } while(0)
-#define swingl_s(x, y) do { chassis.set_swing_pid(ez::LEFT_SWING, x, y); chassis.wait_drive(); } while(0)
-#define swing_r(x) do { chassis.set_swing_pid(ez::RIGHT_SWING, x, SWING_SPEED); chassis.wait_drive(); } while(0)
-#define swingr_s(x, y) do { chassis.set_swing_pid(ez::RIGHT_SWING, x, y); chassis.wait_drive(); } while(0)
+#define swing_l(x) do { chassis.set_swing_pid(ez::LEFT_SWING, x, SWING_SPEED); } while(0)
+#define swingl_s(x, y) do { chassis.set_swing_pid(ez::LEFT_SWING, x, y); } while(0)
+#define swing_r(x) do { chassis.set_swing_pid(ez::RIGHT_SWING, x, SWING_SPEED); } while(0)
+#define swingr_s(x, y) do { chassis.set_swing_pid(ez::RIGHT_SWING, x, y); } while(0)
 
-#define turn(x) do { chassis.set_turn_pid(x, TURN_SPEED); chassis.wait_drive(); } while(0)
-#define turn_s(x, y) do { chassis.set_turn_pid(x, y); chassis.wait_drive(); } while(0)
-#define drive(x) do { chassis.set_drive_pid(x, DRIVE_SPEED, true); chassis.wait_drive(); } while(0)
-#define drive_s(x, y) do { chassis.set_drive_pid(x, y, true); chassis.wait_drive(); } while(0)
+#define turn(x) do { chassis.set_turn_pid(x, TURN_SPEED); } while(0)
+#define turn_s(x, y) do { chassis.set_turn_pid(x, y); } while(0)
+#define drive(x) do { chassis.set_drive_pid(x, DRIVE_SPEED, true); } while(0)
+#define drive_s(x, y) do { chassis.set_drive_pid(x, y, true); } while(0)
+#define complete() do { chassis.wait_drive(); } while(0)
 
 /////
 // For instalattion, upgrading, documentations and tutorials, check out website!
@@ -49,9 +50,9 @@ void exit_condition_defaults() {
 }
 
 void modified_exit_condition() {
-  chassis.set_exit_condition(chassis.turn_exit, 100, 3, 500, 7, 500, 500);
-  chassis.set_exit_condition(chassis.swing_exit, 100, 3, 500, 7, 500, 500);
-  chassis.set_exit_condition(chassis.drive_exit, 80, 50, 300, 150, 500, 500);
+  chassis.set_exit_condition(chassis.turn_exit, 15, 3, 100, 7, 200, 500);
+  chassis.set_exit_condition(chassis.swing_exit, 15, 3, 100, 7, 200, 500);
+  chassis.set_exit_condition(chassis.drive_exit, 15, 50, 100, 150, 200, 500);
 }
 
 void oppsteal() {
@@ -234,45 +235,43 @@ void oppton() {
 }
 
 void skillsProg() {
-  // open blocker
-  chassis.set_angle(0);
-  swing_r(-45);
-  drive(20);
-  swing_l(0);
-  drive(24);
-  drive(-24);
-  turn(45);
-
-
-  // chassis.set_swing_pid(ez::LEFT_SWING, -45, SWING_SPEED);
-  // chassis.wait_drive();
-
-
-  // // After lined up with pipe
+  
+  
+  // // open blocker
   // blocker.set_value(true);
   // pros::delay(1000);
   // // turn on slapper for 5 sec
   // slapper_motor.move(127);
-  // pros::delay(5000);
+  // pros::delay(3000);
+
   // slapper_motor.move(0);
   // blocker.set_value(false);
 
+  // re-calibrate imu
+  drive_s(-7, 50);
+  complete();
+  pros::delay(500); 
+  chassis.set_angle(-42);
 
-  // // run intake for 0.5 seconds as warning
-  // intake_motor.move(127);
-  // pros::delay(500); 
-  // intake_motor.move(0);
+  // run intake for 0.5 seconds as warning
+  intake_motor.move(127);
+  pros::delay(500); 
+  intake_motor.move(0);
 
-  // // swing
-  // chassis.set_swing_pid(ez::LEFT_SWING, 0, SWING_SPEED);
-  // chassis.wait_drive();
 
-  // chassis.set_drive_pid(72, DRIVE_SPEED, true);
-  // chassis.wait_drive();
-
-  // chassis.set_swing_pid(ez::RIGHT_SWING, -90, SWING_SPEED);
-  // chassis.wait_drive();
+  // start movement
+  swing_l(0);
+  complete();
   
+
+  slapper_motor.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_HOLD);
+  slapper_motor.move(127);
+  pros::delay(650);
+  slapper_motor.move(0);
+
+  drive(72);
+  complete();
+  slapper_motor.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_COAST);
 }
 
 ///

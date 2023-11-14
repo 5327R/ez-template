@@ -7,6 +7,8 @@ pros::Motor intake_motor(4); //
 pros::ADIDigitalOut flaps('A');
 pros::Motor slapper_motor(-10); //
 pros::ADIDigitalOut blocker('C');
+pros::ADIDigitalIn pgDownSwitch('G');
+pros::ADIDigitalIn pgUpSwitch('H');
 
 bool slapper_on = false;
 bool flaps_out = false;
@@ -149,6 +151,16 @@ void debugDataTask()
 		pros::delay(100);
 	}
 }
+// void autonSelectTask(){
+// 	while (true){
+// 		if (pgDownSwitch.get_new_press()){
+// 			ez::as::page_down();
+// 		}
+// 		else if (pgUpSwitch.get_new_press()){
+// 			ez::as::page_up();
+// 		}
+// 	}
+// }
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -168,9 +180,10 @@ void initialize()
 	chassis.set_active_brake(0);					   // Sets the active brake kP. We recommend 0.1.
 	chassis.set_curve_default(0, 0);				   // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 	default_constants();							   // Set the drive to your own constants from autons.cpp!
-	exit_condition_defaults();						   // Set the exit conditions to your own constants from autons.cpp!
+	exit_condition_defaults();
 
 	pros::Task dataTask(debugDataTask);
+	
 	// These are already defaulted to these buttons, but you can change the left/right curve buttons here!
 	// chassis.set_left_curve_buttons (pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT); // If using tank, only the left side is used.
 	// chassis.set_right_curve_buttons(pros::E_CONTROLLER_DIGITAL_Y,    pros::E_CONTROLLER_DIGITAL_A);
@@ -178,15 +191,18 @@ void initialize()
 	// Autonomous Selector using LLEMU
 	ez::as::auton_selector.add_autons({
 		Auton("(friendlyton) right side ABSOLUTE CLASSIC", friendlyton),
-		// Auton("(oppsteal) left side (with matchload and push center ball to other side)", oppsteal),
-		// Auton("(oppton) starts on enemy side (match loads)", oppton),
-		// Auton("(ProgSkills) Just runs flywheel the whole time.", skillsProg),
+		Auton("(oppsteal) left side (with matchload and push center ball to other side)", oppsteal),
+		Auton("(oppton) starts on enemy side (match loads)", oppton),
+		Auton("(ProgSkills) Just runs flywheel the whole time.", skillsProg),
 
 	});
+
+	ez::as::limit_switch_lcd_initialize(&pgUpSwitch, &pgDownSwitch);
 
 	// Initialize chassis and auton selector
 	chassis.initialize();
 	ez::as::initialize();
+	
 }
 
 /**
@@ -231,11 +247,12 @@ void autonomous()
 	chassis.reset_drive_sensor();			   // Reset drive sensors to 0
 	chassis.set_drive_brake(MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
 
-	// ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
+	//ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
 	std::cout << "Autonomous Has Run";
 	// drive_example();
-	friendlyton();
-	// skillsProg();
+	// friendlyton();
+	skillsProg();
+	
 }
 
 /**
