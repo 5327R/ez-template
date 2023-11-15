@@ -98,3 +98,5 @@ extern bool arm_on;
 extern bool intake_running;
 extern bool intake_in;
 extern bool force_out;
+
+extern void move_flaps();

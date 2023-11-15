@@ -35,7 +35,7 @@ const int SWING_SPEED = 90;
 void default_constants() {
   chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
-  chassis.set_pid_constants(&chassis.headingPID, 20, 0, 20, 0);
+  chassis.set_pid_constants(&chassis.headingPID, 15, 0, 20, 0);
   chassis.set_pid_constants(&chassis.forward_drivePID, 1, 0, 6.7, 0);
   chassis.set_pid_constants(&chassis.backward_drivePID, 1, 0, 6.7, 0);
   chassis.set_pid_constants(&chassis.turnPID, 10, 0, 75, 15);
@@ -117,7 +117,7 @@ void friendlyton() {
   chassis.set_swing_pid(ez::LEFT_SWING, 45, 127);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(17, DRIVE_SPEED, true);
+  chassis.set_drive_pid(19, DRIVE_SPEED, true);
   chassis.wait_drive();
   
   chassis.set_swing_pid(ez::RIGHT_SWING, 0, 127);
@@ -146,7 +146,7 @@ void friendlyton() {
   chassis.set_turn_pid(17, TURN_SPEED);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(17, DRIVE_SPEED, true);
+  chassis.set_drive_pid(15, DRIVE_SPEED, true);
   chassis.wait_drive();
 
   chassis.set_swing_pid(ez::LEFT_SWING, 90, 60);
@@ -237,26 +237,27 @@ void oppton() {
 void skillsProg() {
   
   
-  // // open blocker
-  // blocker.set_value(true);
-  // pros::delay(1000);
-  // // turn on slapper for 5 sec
-  // slapper_motor.move(127);
-  // pros::delay(3000);
-
-  // slapper_motor.move(0);
-  // blocker.set_value(false);
-
-  // re-calibrate imu
-  drive_s(-7, 50);
-  complete();
-  pros::delay(500); 
-  chassis.set_angle(-42);
+  // open blocker
+  blocker.set_value(true);
+  pros::delay(1000); // wait for blocker to open
+  // turn on slapper for 30 sec
+  slapper_motor.move(127);
+  pros::delay(30000);
 
   // run intake for 0.5 seconds as warning
   intake_motor.move(127);
   pros::delay(500); 
   intake_motor.move(0);
+  // stop slapper
+  slapper_motor.move(0);
+  blocker.set_value(false);
+
+  // re-calibrate imu after lineup with 
+  swing_l(-45);
+  complete();
+  chassis.set_angle(-42);
+
+  
 
 
   // start movement
@@ -269,9 +270,46 @@ void skillsProg() {
   pros::delay(650);
   slapper_motor.move(0);
 
-  drive(72);
+  drive(78);
   complete();
   slapper_motor.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_COAST);
+
+  swing_r(-45);
+  complete();
+
+  drive(24);
+  pros::delay(500);
+  swing_r(-90);
+  complete();
+
+  drive(12);
+  pros::delay(500);
+  drive(-6);
+  pros::delay(500);
+  swing_r(30);
+  complete();
+
+  drive(-38);
+  complete();
+
+  swing_r(90);
+  complete();
+
+  drive(-20);
+  complete();
+
+  turn(180);
+  complete();
+
+  flaps.set_value(true);
+
+  drive(-30);
+  complete();
+  drive(30);
+  complete();
+  drive(-30);
+  complete();
+
 }
 
 ///

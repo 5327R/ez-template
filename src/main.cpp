@@ -137,6 +137,7 @@ void set_blocker()
 	else
 	{
 		blocker.set_value(false);
+		slapper_motor.move(0);
 	}
 }
 
@@ -250,8 +251,8 @@ void autonomous()
 	//ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
 	std::cout << "Autonomous Has Run";
 	// drive_example();
-	// friendlyton();
-	skillsProg();
+	friendlyton();
+	//skillsProg();
 	
 }
 
