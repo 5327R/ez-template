@@ -183,8 +183,8 @@ void initialize()
 	default_constants();							   // Set the drive to your own constants from autons.cpp!
 	exit_condition_defaults();
 
-	pros::Task dataTask(debugDataTask);
-	
+	// pros::Task dataTask(debugDataTask);
+
 	// These are already defaulted to these buttons, but you can change the left/right curve buttons here!
 	// chassis.set_left_curve_buttons (pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT); // If using tank, only the left side is used.
 	// chassis.set_right_curve_buttons(pros::E_CONTROLLER_DIGITAL_Y,    pros::E_CONTROLLER_DIGITAL_A);
@@ -203,7 +203,6 @@ void initialize()
 	// Initialize chassis and auton selector
 	chassis.initialize();
 	ez::as::initialize();
-	
 }
 
 /**
@@ -248,12 +247,11 @@ void autonomous()
 	chassis.reset_drive_sensor();			   // Reset drive sensors to 0
 	chassis.set_drive_brake(MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
 
-	//ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
+	// ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
 	std::cout << "Autonomous Has Run";
 	// drive_example();
-	friendlyton();
-	//skillsProg();
-	
+	// friendlyton();
+	skillsProg();
 }
 
 /**
@@ -285,26 +283,31 @@ void opcontrol()
 		// Intake
 		if (master.get_digital_new_press(DIGITAL_R1))
 		{
+			std::cout << "intake on\n";
 			run_intake(true);
 		}
 		if (master.get_digital_new_press(DIGITAL_R2))
 		{
+			std::cout << "intake off\n";
 			run_intake(false);
 		}
 
 		// Flaps
 		if (master.get_digital_new_press(DIGITAL_A))
 		{
+			std::cout << "flaps\n";
 			move_flaps();
 		}
 
-		if (master.get_digital_new_press(DIGITAL_L1))
+		if (master.get_digital_new_press(DIGITAL_L2))
 		{
+			std::cout << "slapper\n";
 			run_slapper();
 		}
 
 		if (master.get_digital_new_press(DIGITAL_Y))
 		{
+			std::cout << "Blocker\n";
 			set_blocker();
 		}
 
