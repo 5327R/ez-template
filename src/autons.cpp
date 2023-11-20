@@ -90,6 +90,10 @@ void modified_exit_condition()
   chassis.set_exit_condition(chassis.drive_exit, 15, 50, 100, 150, 200, 500);
 }
 
+
+
+// Custom Autons
+// ---------------------------------------------------------------------------------------------------------------------
 void oppsteal()
 {
   chassis.set_swing_pid(ez::RIGHT_SWING, -45, SWING_SPEED);
@@ -153,23 +157,23 @@ void friendlyton()
   chassis.set_swing_pid(ez::LEFT_SWING, 45, 127);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(19, DRIVE_SPEED, true);
+  chassis.set_drive_pid(18, DRIVE_SPEED, true);
   chassis.wait_drive();
 
   chassis.set_swing_pid(ez::RIGHT_SWING, 0, 127);
-  pros::delay(200);
+  chassis.wait_drive();
   intake_motor.move(127);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(-3, DRIVE_SPEED, true);
+  chassis.set_drive_pid(-5, DRIVE_SPEED, false);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(8, 127, true);
+  chassis.set_drive_pid(8, 127, false);
   chassis.wait_drive();
 
   intake_motor.move(0);
 
-  chassis.set_drive_pid(-7, DRIVE_SPEED, true);
+  chassis.set_drive_pid(-10, DRIVE_SPEED, false);
   chassis.wait_drive();
 
   chassis.set_turn_pid(-69, TURN_SPEED);
@@ -192,15 +196,15 @@ void friendlyton()
   intake_motor.move(127);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(-10, 127, true);
+  chassis.set_drive_pid(-10, 127, false);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(10, 127, true);
+  chassis.set_drive_pid(10, 127, false);
   chassis.wait_drive();
 
   intake_motor.move(0);
 
-  chassis.set_drive_pid(-5, DRIVE_SPEED, true);
+  chassis.set_drive_pid(-5, DRIVE_SPEED, false);
   chassis.wait_drive();
 
   chassis.set_turn_pid(-90, TURN_SPEED);
@@ -217,10 +221,10 @@ void friendlyton()
   intake_motor.move(127);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(-10, 127, true);
+  chassis.set_drive_pid(-10, 127, false);
   chassis.wait_drive();
 
-  chassis.set_drive_pid(10, 127, true);
+  chassis.set_drive_pid(10, 127, false);
   chassis.wait_drive();
 
   intake_motor.move(0);
@@ -268,37 +272,42 @@ void oppton()
 
 void skillsProg()
 {
+   // open blocker
+   blocker.set_value(true);
+   pros::delay(1000); // wait for blocker to open
+   // turn on slapper for 30 sec
+   slapper_motor.move(127);
+   pros::delay(35000);
 
-  // open blocker
-  blocker.set_value(true);
-  pros::delay(1000); // wait for blocker to open
-  // turn on slapper for 30 sec
-  slapper_motor.move(127);
-  pros::delay(30000);
+   // run intake for 0.5 seconds as warning
+   intake_motor.move(127);
+   pros::delay(500);
+   intake_motor.move(0);
+   // stop slapper
+   slapper_motor.move(0);
+   blocker.set_value(false);
 
-  // run intake for 0.5 seconds as warning
-  intake_motor.move(127);
-  pros::delay(500);
-  intake_motor.move(0);
-  // stop slapper
-  slapper_motor.move(0);
-  blocker.set_value(false);
 
+  // -------------------- AFTER MATCH-LOADING -------------------- //
   // re-calibrate imu after lineup with
   swing_l(-45);
   complete();
   chassis.set_angle(-42);
+  //intake_motor.move(127);
 
   // start movement
-  swing_l(0);
+  swing_l(10);
   complete();
+  drive(10);
+  pros::delay(250);
+  swing_r(0);
 
   slapper_motor.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_HOLD);
   slapper_motor.move(127);
   pros::delay(650);
   slapper_motor.move(0);
 
-  drive(78);
+  drive_s(65, 75);
   complete();
   slapper_motor.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_COAST);
 
@@ -310,12 +319,14 @@ void skillsProg()
   swing_r(-90);
   complete();
 
+  intake_motor.move(127);
   drive(12);
   pros::delay(500);
   drive(-6);
   pros::delay(500);
   swing_r(30);
   complete();
+  intake_motor.move(0);
 
   drive(-38);
   complete();
@@ -329,15 +340,43 @@ void skillsProg()
   turn(180);
   complete();
 
+
+
+  // -------------------- FINAL PUSHES INTO GOAL -------------------- //
+  intake_motor.move(0);
   flaps.set_value(true);
 
   drive(-30);
   complete();
-  drive(30);
+  flaps.set_value(false);
+  drive(25);
   complete();
-  drive(-30);
+  turn(270);
   complete();
+  drive(20);
+  complete();
+  turn(215);
+  complete();
+  flaps.set_value(true);
+  drive_s(-22, 127);
+  pros::delay(400);
+  swingl_s(180, 127);
+  pros::delay(400);
+  drive_s(-10, 127);
+  complete();
+  drive_s(10, 127);
+  complete();
+  drive_s(-10, 127);
+  complete();
+  drive_s(10, 127);
 }
+
+
+
+
+
+// Simple Examples
+// ---------------------------------------------------------------------------------------------------------------------
 
 ///
 // Drive Example

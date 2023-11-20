@@ -143,6 +143,18 @@ void set_blocker()
 
 // Game Loop Functions
 // --------------------------------------------------------------------------------------------------------------------------------
+
+void autonSelectTask()
+{
+	while (true)
+	{
+		if (master.get_digital_new_press(DIGITAL_RIGHT))
+		{
+			std::cout << "page up\n";
+			ez::as::page_up();
+		}
+	}
+}
 void debugDataTask()
 {
 	while (true)
@@ -152,16 +164,6 @@ void debugDataTask()
 		pros::delay(100);
 	}
 }
-// void autonSelectTask(){
-// 	while (true){
-// 		if (pgDownSwitch.get_new_press()){
-// 			ez::as::page_down();
-// 		}
-// 		else if (pgUpSwitch.get_new_press()){
-// 			ez::as::page_up();
-// 		}
-// 	}
-// }
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -177,7 +179,7 @@ void initialize()
 	pros::delay(500); // Stop the user from doing anything while legacy ports configure.
 
 	// Configure your chassis controls
-	chassis.toggle_modify_curve_with_controller(true); // Enables modifying the controller curve with buttons on the joysticks
+	chassis.toggle_modify_curve_with_controller(false); // Enables modifying the controller curve with buttons on the joysticks
 	chassis.set_active_brake(0);					   // Sets the active brake kP. We recommend 0.1.
 	chassis.set_curve_default(0, 0);				   // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 	default_constants();							   // Set the drive to your own constants from autons.cpp!
@@ -198,7 +200,7 @@ void initialize()
 
 	});
 
-	ez::as::limit_switch_lcd_initialize(&pgUpSwitch, &pgDownSwitch);
+	// ez::as::limit_switch_lcd_initialize(&pgUpSwitch, &pgDownSwitch);
 
 	// Initialize chassis and auton selector
 	chassis.initialize();
@@ -248,10 +250,10 @@ void autonomous()
 	chassis.set_drive_brake(MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
 
 	// ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
-	std::cout << "Autonomous Has Run";
+	// std::cout << "Autonomous Has Run\n";
 	// drive_example();
-	// friendlyton();
-	skillsProg();
+    //friendlyton(); //yes
+	skillsProg(); // 18 idk why kevin told me to -_-
 }
 
 /**
@@ -299,7 +301,7 @@ void opcontrol()
 			move_flaps();
 		}
 
-		if (master.get_digital_new_press(DIGITAL_L2))
+		if (master.get_digital_new_press(DIGITAL_L1))
 		{
 			std::cout << "slapper\n";
 			run_slapper();
