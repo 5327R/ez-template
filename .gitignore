@@ -16,5 +16,7 @@ temp.errors
 *.ini
 .d/
 
+# Hidden files
+*.zip
 .*
 !.gitignore
