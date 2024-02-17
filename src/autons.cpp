@@ -90,8 +90,6 @@ void modified_exit_condition()
   chassis.set_exit_condition(chassis.drive_exit, 15, 50, 100, 150, 200, 500);
 }
 
-
-
 // Custom Autons
 // ---------------------------------------------------------------------------------------------------------------------
 void oppsteal()
@@ -154,32 +152,33 @@ void oppsteal()
 
 void friendlyton()
 {
-  chassis.set_swing_pid(ez::LEFT_SWING, 45, 127);
+  chassis.set_swing_pid(ez::LEFT_SWING, 45, 127); // swings out of start position
   chassis.wait_drive();
 
-  chassis.set_drive_pid(18, DRIVE_SPEED, true);
+  chassis.set_drive_pid(18, DRIVE_SPEED, true); // drives 18 inches toward goal
   chassis.wait_drive();
 
-  chassis.set_swing_pid(ez::RIGHT_SWING, 0, 127);
-  chassis.wait_drive();
-  intake_motor.move(127);
+  chassis.set_swing_pid(ez::RIGHT_SWING, 0, 127); // lines up with goal to score
   chassis.wait_drive();
 
-  chassis.set_drive_pid(-5, DRIVE_SPEED, false);
+  intake_motor.move(127); // starts outaking the tribal with intake.
   chassis.wait_drive();
 
-  chassis.set_drive_pid(8, 127, false);
+  chassis.set_drive_pid(-5, DRIVE_SPEED, false); // pulls back 5 in
   chassis.wait_drive();
 
-  intake_motor.move(0);
+  chassis.set_drive_pid(8, 127, false); // rushes forward
+  chassis.wait_drive();
+
+  intake_motor.move(0); // stops intake
 
   chassis.set_drive_pid(-10, DRIVE_SPEED, false);
   chassis.wait_drive();
 
-  chassis.set_turn_pid(-69, TURN_SPEED);
+  chassis.set_turn_pid(-69, TURN_SPEED); // lines up to center field
   chassis.wait_drive();
   // 47
-  chassis.set_drive_pid(47, DRIVE_SPEED, true);
+  chassis.set_drive_pid(47, DRIVE_SPEED, true); // grabs midfield triball
   intake_motor.move(-127);
   chassis.wait_drive();
   // 0
@@ -272,28 +271,27 @@ void oppton()
 
 void skillsProg()
 {
-   // open blocker
-   blocker.set_value(true);
-   pros::delay(1000); // wait for blocker to open
-   // turn on slapper for 30 sec
-   slapper_motor.move(127);
-   pros::delay(35000);
+  // open blocker
+  blocker.set_value(true);
+  pros::delay(1000); // wait for blocker to open
+  // turn on slapper for 30 sec
+  slapper_motor.move(127);
+  pros::delay(35000);
 
-   // run intake for 0.5 seconds as warning
-   intake_motor.move(127);
-   pros::delay(500);
-   intake_motor.move(0);
-   // stop slapper
-   slapper_motor.move(0);
-   blocker.set_value(false);
-
+  // run intake for 0.5 seconds as warning
+  intake_motor.move(127);
+  pros::delay(500);
+  intake_motor.move(0);
+  // stop slapper
+  slapper_motor.move(0);
+  blocker.set_value(false);
 
   // -------------------- AFTER MATCH-LOADING -------------------- //
   // re-calibrate imu after lineup with
   swing_l(-45);
   complete();
   chassis.set_angle(-42);
-  //intake_motor.move(127);
+  // intake_motor.move(127);
 
   // start movement
   swing_l(10);
@@ -340,8 +338,6 @@ void skillsProg()
   turn(180);
   complete();
 
-
-
   // -------------------- FINAL PUSHES INTO GOAL -------------------- //
   intake_motor.move(0);
   flaps.set_value(true);
@@ -371,10 +367,6 @@ void skillsProg()
   drive_s(10, 127);
 }
 
-
-
-
-
 // Simple Examples
 // ---------------------------------------------------------------------------------------------------------------------
 
@@ -391,7 +383,7 @@ void drive_example()
 
   // Drive forward and back
   chassis.set_drive_pid(24, DRIVE_SPEED, true);
-  pros::delay(500);
+  chassis.wait_drive();
 
   chassis.set_turn_pid(90, TURN_SPEED);
   chassis.wait_drive();

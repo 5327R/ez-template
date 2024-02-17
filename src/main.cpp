@@ -24,50 +24,50 @@ bool outtake = false;
 
 // Chassis constructor
 Drive chassis(
-	// Left Chassis Ports (negative port will reverse it!)
-	//   the first port is the sensored port (when trackers are not used!)
-	{-15, -17, -6}
+		// Left Chassis Ports (negative port will reverse it!)
+		//   the first port is the sensored port (when trackers are not used!)
+		{-20, 16, -1}
 
-	// Right Chassis Ports (negative port will reverse it!)
-	//   the first port is the sensored port (when trackers are not used!)
-	,
-	{19, 18, 3}
+		// Right Chassis Ports (negative port will reverse it!)
+		//   the first port is the sensored port (when trackers are not used!)
+		,
+		{12, -19, 10}
 
-	// IMU Port
-	,
-	7
+		// IMU Port
+		,
+		18
 
-	// Wheel Diameter (Remember, 4" wheels are actually 4.125!)
-	//    (or tracking wheel diameter)
-	,
-	3.25
+		// Wheel Diameter (Remember, 4" wheels are actually 4.125!)
+		//    (or tracking wheel diameter)
+		,
+		3.25
 
-	// Cartridge RPM
-	//   (or tick per rotation if using tracking wheels)
-	,
-	600
+		// Cartridge RPM
+		//   (or tick per rotation if using tracking wheels)
+		,
+		600
 
-	// External Gear Ratio (MUST BE DECIMAL)
-	//    (or gear ratio of tracking wheel)
-	// eg. if your drive is 84:36 where the 36t is powered, your RATIO would be 2.333.
-	// eg. if your drive is 36:60 where the 60t is powered, your RATIO would be 0.6.
-	,
-	1.66666666667
+		// External Gear Ratio (MUST BE DECIMAL)
+		//    (or gear ratio of tracking wheel)
+		// eg. if your drive is 84:36 where the 36t is powered, your RATIO would be 2.333.
+		// eg. if your drive is 36:60 where the 60t is powered, your RATIO would be 0.6.
+		,
+		1.333333
 
-	// Uncomment if using tracking wheels
-	/*
-	// Left Tracking Wheel Ports (negative port will reverse it!)
-	// ,{1, 2} // 3 wire encoder
-	// ,8 // Rotation sensor
+		// Uncomment if using tracking wheels
+		/*
+		// Left Tracking Wheel Ports (negative port will reverse it!)
+		// ,{1, 2} // 3 wire encoder
+		// ,8 // Rotation sensor
 
-	// Right Tracking Wheel Ports (negative port will reverse it!)
-	// ,{-3, -4} // 3 wire encoder
-	// ,-9 // Rotation sensor
-	*/
+		// Right Tracking Wheel Ports (negative port will reverse it!)
+		// ,{-3, -4} // 3 wire encoder
+		// ,-9 // Rotation sensor
+		*/
 
-	// Uncomment if tracking wheels are plugged into a 3 wire expander
-	// 3 Wire Port Expander Smart Port
-	// ,1
+		// Uncomment if tracking wheels are plugged into a 3 wire expander
+		// 3 Wire Port Expander Smart Port
+		// ,1
 );
 
 // Subsystems
@@ -93,7 +93,7 @@ void run_intake(bool in)
 		intake_in = false;
 	}
 
-    cout << intake_motor.get_voltage() << "\n";
+	cout << intake_motor.get_voltage() << "\n";
 }
 
 void move_flaps()
@@ -145,7 +145,6 @@ void set_blocker()
 
 // Game Loop Functions
 // --------------------------------------------------------------------------------------------------------------------------------
-
 void autonSelectTask()
 {
 	while (true)
@@ -162,7 +161,6 @@ void debugDataTask()
 	while (true)
 	{
 		std::cout << chassis.imu.get_heading() << std::endl;
-		// std::cout << "I love kevin\n";
 		pros::delay(100);
 	}
 }
@@ -173,6 +171,7 @@ void debugDataTask()
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+// --------------------------------------------------------------------------------------------------------------------------------
 void initialize()
 {
 	// Print our branding over your terminal :D
@@ -182,9 +181,11 @@ void initialize()
 
 	// Configure your chassis controls
 	chassis.toggle_modify_curve_with_controller(false); // Enables modifying the controller curve with buttons on the joysticks
-	chassis.set_active_brake(0);					   // Sets the active brake kP. We recommend 0.1.
-	chassis.set_curve_default(0, 0);				   // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
-	default_constants();							   // Set the drive to your own constants from autons.cpp!
+	chassis.left_curve_function(20);
+	chassis.right_curve_function(20);
+	chassis.set_active_brake(0);		 // Sets the active brake kP. We recommend 0.1.
+	chassis.set_curve_default(0, 0); // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
+	default_constants();						 // Set the drive to your own constants from autons.cpp!
 	exit_condition_defaults();
 	// pros::Task dataTask(debugDataTask);
 
@@ -194,10 +195,10 @@ void initialize()
 
 	// Autonomous Selector using LLEMU
 	ez::as::auton_selector.add_autons({
-		Auton("(friendlyton) right side ABSOLUTE CLASSIC", friendlyton),
-		Auton("(oppsteal) left side (with matchload and push center ball to other side)", oppsteal),
-		Auton("(oppton) starts on enemy side (match loads)", oppton),
-		Auton("(ProgSkills) Just runs flywheel the whole time.", skillsProg),
+			Auton("(friendlyton) right side ABSOLUTE CLASSIC", friendlyton),
+			Auton("(oppsteal) left side (with matchload and push center ball to other side)", oppsteal),
+			Auton("(oppton) starts on enemy side (match loads)", oppton),
+			Auton("(ProgSkills) Just runs flywheel the whole time.", skillsProg),
 
 	});
 
@@ -245,16 +246,16 @@ void competition_initialize()
  */
 void autonomous()
 {
-	chassis.reset_pid_targets();			   // Resets PID targets to 0
-	chassis.reset_gyro();					   // Reset gyro position to 0
-	chassis.reset_drive_sensor();			   // Reset drive sensors to 0
+	chassis.reset_pid_targets();							 // Resets PID targets to 0
+	chassis.reset_gyro();											 // Reset gyro position to 0
+	chassis.reset_drive_sensor();							 // Reset drive sensors to 0
 	chassis.set_drive_brake(MOTOR_BRAKE_HOLD); // Set motors to hold.  This helps autonomous consistency.
 
 	// ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
-	// std::cout << "Autonomous Has Run\n";
-	// drive_example();
-    //friendlyton(); //yes
-	skillsProg(); // 18 idk why kevin told me to -_-
+
+	friendlyton();
+
+	std::cout << "Autonomous Has Run\n";
 }
 
 /**
