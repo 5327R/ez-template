@@ -3,35 +3,26 @@
 // For instalattion, upgrading, documentations and tutorials, check out website!
 // https://ez-robotics.github.io/EZ-Template/
 /////
-pros::Motor intake_motor(4); //
-pros::ADIDigitalOut flaps('A');
-pros::Motor slapper_motor(-10); //
-pros::ADIDigitalOut blocker('C');
-pros::ADIDigitalIn pgDownSwitch('G');
-pros::ADIDigitalIn pgUpSwitch('H');
+pros::Motor intake(-10); //
+pros::ADIDigitalOut verticalFlap('E');
+pros::ADIDigitalOut horizontalFlaps('F');
+pros::Motor slapper1(-14);
+pros::Motor slapper2(15);
 
-bool slapper_on = false;
-bool flaps_out = false;
-bool blocker_on = false;
-// true
-bool intake_running = false;
-// false
-bool intake_in = true;
-// bool force_out = false;
-
-bool intake = false;
-bool outtake = false;
+bool slapperOn = false;
+bool verticalFlapOut = false;
+bool horizontalFlapsOut = false;
 
 // Chassis constructor
 Drive chassis(
 		// Left Chassis Ports (negative port will reverse it!)
 		//   the first port is the sensored port (when trackers are not used!)
-		{-20, 16, -1}
+		{-9, 3, -8}
 
 		// Right Chassis Ports (negative port will reverse it!)
 		//   the first port is the sensored port (when trackers are not used!)
 		,
-		{12, -19, 10}
+		{2, -19, 1}
 
 		// IMU Port
 		,
@@ -70,79 +61,6 @@ Drive chassis(
 		// ,1
 );
 
-// Subsystems
-// --------------------------------------------------------------------------------------------------------------------------------
-
-void run_intake(bool in)
-{
-	if (intake_running && (in == intake_in))
-	{
-		intake_motor.move(0);
-		intake_running = false;
-	}
-	else if (in)
-	{
-		intake_motor.move(-127);
-		intake_running = true;
-		intake_in = true;
-	}
-	else
-	{
-		intake_motor.move(127);
-		intake_running = true;
-		intake_in = false;
-	}
-
-	cout << intake_motor.get_voltage() << "\n";
-}
-
-void move_flaps()
-{
-	flaps_out = !flaps_out;
-
-	if (flaps_out)
-	{
-		flaps.set_value(true);
-	}
-	else
-	{
-		flaps.set_value(false);
-	}
-}
-
-void run_slapper()
-{
-	if (!blocker_on)
-	{
-		return;
-	}
-	slapper_on = !slapper_on;
-
-	if (slapper_on)
-	{
-		slapper_motor.move(127);
-	}
-	else
-	{
-		slapper_motor.move(0);
-	}
-}
-
-void set_blocker()
-{
-	blocker_on = !blocker_on;
-
-	if (blocker_on)
-	{
-		blocker.set_value(true);
-	}
-	else
-	{
-		blocker.set_value(false);
-		slapper_motor.move(0);
-	}
-}
-
 // Game Loop Functions
 // --------------------------------------------------------------------------------------------------------------------------------
 void autonSelectTask()
@@ -179,10 +97,10 @@ void initialize()
 
 	pros::delay(500); // Stop the user from doing anything while legacy ports configure.
 
-	// Configure your chassis controls
-	chassis.toggle_modify_curve_with_controller(false); // Enables modifying the controller curve with buttons on the joysticks
-	chassis.left_curve_function(20);
-	chassis.right_curve_function(20);
+	// // Configure your chassis controls
+	chassis.toggle_modify_curve_with_controller(false);
+	// chassis.left_curve_function(20);
+	// chassis.right_curve_function(20);
 	chassis.set_active_brake(0);		 // Sets the active brake kP. We recommend 0.1.
 	chassis.set_curve_default(0, 0); // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 	default_constants();						 // Set the drive to your own constants from autons.cpp!
@@ -190,15 +108,15 @@ void initialize()
 	// pros::Task dataTask(debugDataTask);
 
 	// These are already defaulted to these buttons, but you can change the left/right curve buttons here!
-	// chassis.set_left_curve_buttons (pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT); // If using tank, only the left side is used.
-	// chassis.set_right_curve_buttons(pros::E_CONTROLLER_DIGITAL_Y,    pros::E_CONTROLLER_DIGITAL_A);
+	// chassis.set_left_curve_buttons (pros::E_master_DIGITAL_LEFT, pros::E_master_DIGITAL_RIGHT); // If using tank, only the left side is used.
+	// chassis.set_right_curve_buttons(pros::E_master_DIGITAL_Y,    pros::E_master_DIGITAL_A);
 
 	// Autonomous Selector using LLEMU
 	ez::as::auton_selector.add_autons({
 			Auton("(friendlyton) right side ABSOLUTE CLASSIC", friendlyton),
-			Auton("(oppsteal) left side (with matchload and push center ball to other side)", oppsteal),
-			Auton("(oppton) starts on enemy side (match loads)", oppton),
-			Auton("(ProgSkills) Just runs flywheel the whole time.", skillsProg),
+			// Auton("(oppsteal) left side (with matchload and push center ball to other side)", oppsteal),
+			// Auton("(oppton) starts on enemy side (match loads)", oppton),
+			// Auton("(ProgSkills) Just runs flywheel the whole time.", skillsProg),
 
 	});
 
@@ -253,7 +171,8 @@ void autonomous()
 
 	// ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
 
-	friendlyton();
+	// friendlyton();
+	testAuton();
 
 	std::cout << "Autonomous Has Run\n";
 }
@@ -284,35 +203,56 @@ void opcontrol()
 		// chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
 		// chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
 
-		// Intake
 		if (master.get_digital_new_press(DIGITAL_R1))
 		{
-			std::cout << "intake on\n";
-			run_intake(true);
-		}
-		if (master.get_digital_new_press(DIGITAL_R2))
-		{
-			std::cout << "intake off\n";
-			run_intake(false);
+			if (intake.get_target_velocity() > 0)
+			{
+				intake.move(0);
+			}
+			else
+			{
+				intake.move(127);
+			}
 		}
 
-		// Flaps
-		if (master.get_digital_new_press(DIGITAL_A))
+		if (master.get_digital_new_press(DIGITAL_R2))
 		{
-			std::cout << "flaps\n";
-			move_flaps();
+			if (intake.get_target_velocity() < 0)
+			{
+				intake.move(0);
+			}
+			else
+			{
+				intake.move(-127);
+			}
 		}
 
 		if (master.get_digital_new_press(DIGITAL_L1))
 		{
-			std::cout << "slapper\n";
-			run_slapper();
+			if (slapperOn)
+			{
+				slapper1.move(0);
+				slapper2.move(0);
+				slapperOn = false;
+			}
+			else
+			{
+				slapper1.move(100);
+				slapper2.move(100);
+				slapperOn = true;
+			}
+		}
+
+		if (master.get_digital_new_press(DIGITAL_X))
+		{
+			horizontalFlaps.set_value(!horizontalFlapsOut);
+			horizontalFlapsOut = !horizontalFlapsOut;
 		}
 
 		if (master.get_digital_new_press(DIGITAL_Y))
 		{
-			std::cout << "Blocker\n";
-			set_blocker();
+			verticalFlap.set_value(!verticalFlapOut);
+			verticalFlapOut = !verticalFlapOut;
 		}
 
 		pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!  Keep this ez::util::DELAY_TIME

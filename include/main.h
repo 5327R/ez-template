@@ -40,8 +40,8 @@
 /**
  * You should add more #includes here
  */
-//#include "okapi/api.hpp"
-//#include "pros/api_legacy.h"
+// #include "okapi/api.hpp"
+// #include "pros/api_legacy.h"
 #include "EZ-Template/api.hpp"
 #include "autons.hpp"
 // More includes here...
@@ -66,13 +66,15 @@
  * button press in opcontrol() for testing purposes).
  */
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
-void autonomous(void);
-void initialize(void);
-void disabled(void);
-void competition_initialize(void);
-void opcontrol(void);
+  void autonomous(void);
+  void initialize(void);
+  void disabled(void);
+  void competition_initialize(void);
+  void opcontrol(void);
+  void testAuton(void);
 #ifdef __cplusplus
 }
 #endif
@@ -81,16 +83,16 @@ void opcontrol(void);
 /**
  * You can add C++-only headers here
  */
-//#include <iostream>
+// #include <iostream>
 #endif
 
-#endif  // _PROS_MAIN_H_
+#endif // _PROS_MAIN_H_
 
-extern pros::Motor intake_motor;	//
-extern pros::Optical intake_color; //
-extern pros::ADIDigitalOut flaps;
-extern pros::ADIDigitalOut blocker;
-extern pros::Motor slapper_motor;
+extern pros::Motor intake;
+extern pros::ADIDigitalOut verticalFlap;
+extern pros::ADIDigitalOut horizontalFlaps;
+extern pros::Motor slapper1;
+extern pros::Motor slapper2;
 
 extern bool flywheel_on;
 extern bool flaps_out;

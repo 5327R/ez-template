@@ -92,6 +92,12 @@ void modified_exit_condition()
 
 // Custom Autons
 // ---------------------------------------------------------------------------------------------------------------------
+void testAuton()
+{
+  drive(24);
+  drive(-24);
+}
+
 void oppsteal()
 {
   chassis.set_swing_pid(ez::RIGHT_SWING, -45, SWING_SPEED);
@@ -102,7 +108,7 @@ void oppsteal()
 
   chassis.set_swing_pid(ez::LEFT_SWING, 0, 127);
   pros::delay(200);
-  intake_motor.move(127);
+  intake.move(127);
   chassis.wait_drive();
 
   chassis.set_drive_pid(-3, DRIVE_SPEED, true);
@@ -111,7 +117,7 @@ void oppsteal()
   chassis.set_drive_pid(11, 127, true);
   chassis.wait_drive();
 
-  intake_motor.move(0);
+  intake.move(0);
 
   chassis.set_swing_pid(ez::LEFT_SWING, -50, 127);
   chassis.wait_drive();
@@ -131,23 +137,23 @@ void oppsteal()
   chassis.set_turn_pid(0, TURN_SPEED);
   chassis.wait_drive();
 
-  intake_motor.move(-127);
+  intake.move(-127);
   chassis.set_drive_pid(10, DRIVE_SPEED, true);
   chassis.wait_drive();
   pros::delay(500);
 
   chassis.set_drive_pid(-4, DRIVE_SPEED, true);
   chassis.wait_drive();
-  intake_motor.move(0);
+  intake.move(0);
 
   chassis.set_turn_pid(-90, TURN_SPEED);
   chassis.wait_drive();
 
-  flaps.set_value(true);
+  horizontalFlaps.set_value(true);
   chassis.set_drive_pid(-20, 127, false);
   chassis.wait_drive();
 
-  flaps.set_value(false);
+  horizontalFlaps.set_value(false);
 }
 
 void friendlyton()
@@ -161,7 +167,7 @@ void friendlyton()
   chassis.set_swing_pid(ez::RIGHT_SWING, 0, 127); // lines up with goal to score
   chassis.wait_drive();
 
-  intake_motor.move(127); // starts outaking the tribal with intake.
+  intake.move(127); // starts outaking the tribal with intake.
   chassis.wait_drive();
 
   chassis.set_drive_pid(-5, DRIVE_SPEED, false); // pulls back 5 in
@@ -170,7 +176,7 @@ void friendlyton()
   chassis.set_drive_pid(8, 127, false); // rushes forward
   chassis.wait_drive();
 
-  intake_motor.move(0); // stops intake
+  intake.move(0); // stops intake
 
   chassis.set_drive_pid(-10, DRIVE_SPEED, false);
   chassis.wait_drive();
@@ -179,7 +185,7 @@ void friendlyton()
   chassis.wait_drive();
   // 47
   chassis.set_drive_pid(47, DRIVE_SPEED, true); // grabs midfield triball
-  intake_motor.move(-127);
+  intake.move(-127);
   chassis.wait_drive();
   // 0
   chassis.set_turn_pid(17, TURN_SPEED);
@@ -192,7 +198,7 @@ void friendlyton()
   chassis.wait_drive();
 
   chassis.set_drive_pid(16, 127, true);
-  intake_motor.move(127);
+  intake.move(127);
   chassis.wait_drive();
 
   chassis.set_drive_pid(-10, 127, false);
@@ -201,7 +207,7 @@ void friendlyton()
   chassis.set_drive_pid(10, 127, false);
   chassis.wait_drive();
 
-  intake_motor.move(0);
+  intake.move(0);
 
   chassis.set_drive_pid(-5, DRIVE_SPEED, false);
   chassis.wait_drive();
@@ -210,14 +216,14 @@ void friendlyton()
   chassis.wait_drive();
 
   chassis.set_drive_pid(25, DRIVE_SPEED, true);
-  intake_motor.move(-127);
+  intake.move(-127);
   chassis.wait_drive();
 
   chassis.set_turn_pid(100, TURN_SPEED);
   chassis.wait_drive();
 
   chassis.set_drive_pid(27, DRIVE_SPEED, true);
-  intake_motor.move(127);
+  intake.move(127);
   chassis.wait_drive();
 
   chassis.set_drive_pid(-10, 127, false);
@@ -226,12 +232,12 @@ void friendlyton()
   chassis.set_drive_pid(10, 127, false);
   chassis.wait_drive();
 
-  intake_motor.move(0);
+  intake.move(0);
 
   // chassis.set_swing_pid(ez::LEFT_SWING, 90, SWING_SPEED);
   // chassis.wait_drive();
 
-  // intake_motor.move(127);
+  // intake.move(127);
   // chassis.wait_drive();
 }
 
@@ -245,7 +251,7 @@ void oppton()
 
   chassis.set_swing_pid(ez::LEFT_SWING, 0, 127);
   pros::delay(200);
-  intake_motor.move(127);
+  intake.move(127);
   chassis.wait_drive();
 
   chassis.set_drive_pid(-3, DRIVE_SPEED, true);
@@ -254,7 +260,7 @@ void oppton()
   chassis.set_drive_pid(10, 127, true);
   chassis.wait_drive();
 
-  intake_motor.move(0);
+  intake.move(0);
 
   chassis.set_swing_pid(ez::LEFT_SWING, -45, 127);
   chassis.wait_drive();
@@ -269,103 +275,103 @@ void oppton()
   chassis.wait_drive();
 }
 
-void skillsProg()
-{
-  // open blocker
-  blocker.set_value(true);
-  pros::delay(1000); // wait for blocker to open
-  // turn on slapper for 30 sec
-  slapper_motor.move(127);
-  pros::delay(35000);
+// void skillsProg()
+// {
+//   // open blocker
+//   blocker.set_value(true);
+//   pros::delay(1000); // wait for blocker to open
+//   // turn on slapper for 30 sec
+//   slapper.move(127);
+//   pros::delay(35000);
 
-  // run intake for 0.5 seconds as warning
-  intake_motor.move(127);
-  pros::delay(500);
-  intake_motor.move(0);
-  // stop slapper
-  slapper_motor.move(0);
-  blocker.set_value(false);
+//   // run intake for 0.5 seconds as warning
+//   intake.move(127);
+//   pros::delay(500);
+//   intake.move(0);
+//   // stop slapper
+//   slapper.move(0);
+//   blocker.set_value(false);
 
-  // -------------------- AFTER MATCH-LOADING -------------------- //
-  // re-calibrate imu after lineup with
-  swing_l(-45);
-  complete();
-  chassis.set_angle(-42);
-  // intake_motor.move(127);
+//   // -------------------- AFTER MATCH-LOADING -------------------- //
+//   // re-calibrate imu after lineup with
+//   swing_l(-45);
+//   complete();
+//   chassis.set_angle(-42);
+//   // intake.move(127);
 
-  // start movement
-  swing_l(10);
-  complete();
-  drive(10);
-  pros::delay(250);
-  swing_r(0);
+//   // start movement
+//   swing_l(10);
+//   complete();
+//   drive(10);
+//   pros::delay(250);
+//   swing_r(0);
 
-  slapper_motor.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_HOLD);
-  slapper_motor.move(127);
-  pros::delay(650);
-  slapper_motor.move(0);
+//   slapper.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_HOLD);
+//   slapper.move(127);
+//   pros::delay(650);
+//   slapper.move(0);
 
-  drive_s(65, 75);
-  complete();
-  slapper_motor.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_COAST);
+//   drive_s(65, 75);
+//   complete();
+//   slapper.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_COAST);
 
-  swing_r(-45);
-  complete();
+//   swing_r(-45);
+//   complete();
 
-  drive(24);
-  pros::delay(500);
-  swing_r(-90);
-  complete();
+//   drive(24);
+//   pros::delay(500);
+//   swing_r(-90);
+//   complete();
 
-  intake_motor.move(127);
-  drive(12);
-  pros::delay(500);
-  drive(-6);
-  pros::delay(500);
-  swing_r(30);
-  complete();
-  intake_motor.move(0);
+//   intake.move(127);
+//   drive(12);
+//   pros::delay(500);
+//   drive(-6);
+//   pros::delay(500);
+//   swing_r(30);
+//   complete();
+//   intake.move(0);
 
-  drive(-38);
-  complete();
+//   drive(-38);
+//   complete();
 
-  swing_r(90);
-  complete();
+//   swing_r(90);
+//   complete();
 
-  drive(-20);
-  complete();
+//   drive(-20);
+//   complete();
 
-  turn(180);
-  complete();
+//   turn(180);
+//   complete();
 
-  // -------------------- FINAL PUSHES INTO GOAL -------------------- //
-  intake_motor.move(0);
-  flaps.set_value(true);
+//   // -------------------- FINAL PUSHES INTO GOAL -------------------- //
+//   intake.move(0);
+//   horizontalFlaps.set_value(true);
 
-  drive(-30);
-  complete();
-  flaps.set_value(false);
-  drive(25);
-  complete();
-  turn(270);
-  complete();
-  drive(20);
-  complete();
-  turn(215);
-  complete();
-  flaps.set_value(true);
-  drive_s(-22, 127);
-  pros::delay(400);
-  swingl_s(180, 127);
-  pros::delay(400);
-  drive_s(-10, 127);
-  complete();
-  drive_s(10, 127);
-  complete();
-  drive_s(-10, 127);
-  complete();
-  drive_s(10, 127);
-}
+//   drive(-30);
+//   complete();
+//   horizontalFlaps.set_value(false);
+//   drive(25);
+//   complete();
+//   turn(270);
+//   complete();
+//   drive(20);
+//   complete();
+//   turn(215);
+//   complete();
+//   horizontalFlaps.set_value(true);
+//   drive_s(-22, 127);
+//   pros::delay(400);
+//   swingl_s(180, 127);
+//   pros::delay(400);
+//   drive_s(-10, 127);
+//   complete();
+//   drive_s(10, 127);
+//   complete();
+//   drive_s(-10, 127);
+//   complete();
+//   drive_s(10, 127);
+// }
 
 // Simple Examples
 // ---------------------------------------------------------------------------------------------------------------------
