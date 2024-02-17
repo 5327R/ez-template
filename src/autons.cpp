@@ -72,7 +72,7 @@ void default_constants()
   chassis.set_pid_constants(&chassis.headingPID, 15, 0, 20, 0);
   chassis.set_pid_constants(&chassis.forward_drivePID, 1, 0, 6.7, 0);
   chassis.set_pid_constants(&chassis.backward_drivePID, 1, 0, 6.7, 0);
-  chassis.set_pid_constants(&chassis.turnPID, 10, 0, 75, 15);
+  chassis.set_pid_constants(&chassis.turnPID, 7, 0, 59, 15); // 10 0 75
   chassis.set_pid_constants(&chassis.swingPID, 10, 0, 75, 0);
 }
 
@@ -95,7 +95,28 @@ void modified_exit_condition()
 void testAuton()
 {
   drive(24);
-  drive(-24);
+  complete();
+
+  turn(90);
+  complete();
+
+  drive(24);
+  complete();
+
+  turn(270);
+  complete();
+
+  drive(24);
+  complete();
+
+  turn(180);
+  complete();
+
+  drive(24);
+  complete();
+
+  turn(0);
+  complete();
 }
 
 void oppsteal()
@@ -156,24 +177,82 @@ void oppsteal()
   horizontalFlaps.set_value(false);
 }
 
+void descore()
+{
+  verticalFlap.set_value(true);
+  pros::delay(500);
+  intake.move(127);
+  chassis.set_turn_pid(60, 127); // swings out of start position
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(16, DRIVE_SPEED, true); // drives 18 inches toward goal
+  chassis.wait_drive();
+
+  intake.move(-127);
+  pros::delay(700);
+  intake.move(0);
+
+  chassis.set_turn_pid(30, 127); // lines up with goal to score
+  chassis.wait_drive();
+
+  verticalFlap.set_value(false);
+
+  chassis.set_drive_pid(30, 127, false); // second push
+  chassis.wait_drive();
+
+  chassis.set_swing_pid(ez::LEFT_SWING, 0, 127); // swings out of start position
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-7, 127, false); // second push
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(14, 127, false); // second push
+  chassis.wait_drive();
+
+  chassis.set_drive_pid(-10, 127, false); // second push
+  chassis.wait_drive();
+
+  chassis.set_turn_pid(-75, 127); // lines up with goal to score
+  chassis.wait_drive();
+
+  intake.move(127);
+  chassis.set_drive_pid(46, 127, true); // second push
+  chassis.wait_drive();
+
+  chassis.set_swing_pid(ez::LEFT_SWING, 90, 110); // swings out of start position
+  chassis.wait_drive();
+
+  intake.move(-127);
+  chassis.set_drive_pid(36, 127, true); // second push
+  chassis.wait_drive();
+  intake.move(0);
+
+  chassis.set_drive_pid(-20, 127, true); // second push
+  chassis.wait_drive();
+}
+
 void friendlyton()
 {
+  verticalFlap.set_value(true);
+  pros::delay(500);
+  verticalFlap.set_value(false);
+  intake.move(127);
   chassis.set_swing_pid(ez::LEFT_SWING, 45, 127); // swings out of start position
   chassis.wait_drive();
 
   chassis.set_drive_pid(18, DRIVE_SPEED, true); // drives 18 inches toward goal
   chassis.wait_drive();
 
-  chassis.set_swing_pid(ez::RIGHT_SWING, 0, 127); // lines up with goal to score
+  chassis.set_swing_pid(ez::RIGHT_SWING, 20, 127); // lines up with goal to score
   chassis.wait_drive();
 
-  intake.move(127); // starts outaking the tribal with intake.
+  intake.move(-127); // starts outaking the tribal with intake.
   chassis.wait_drive();
 
   chassis.set_drive_pid(-5, DRIVE_SPEED, false); // pulls back 5 in
   chassis.wait_drive();
 
-  chassis.set_drive_pid(8, 127, false); // rushes forward
+  chassis.set_drive_pid(10, 127, false); // rushes forward
   chassis.wait_drive();
 
   intake.move(0); // stops intake
@@ -185,7 +264,7 @@ void friendlyton()
   chassis.wait_drive();
   // 47
   chassis.set_drive_pid(47, DRIVE_SPEED, true); // grabs midfield triball
-  intake.move(-127);
+  intake.move(127);
   chassis.wait_drive();
   // 0
   chassis.set_turn_pid(17, TURN_SPEED);
@@ -196,9 +275,10 @@ void friendlyton()
 
   chassis.set_swing_pid(ez::LEFT_SWING, 90, 60);
   chassis.wait_drive();
+  horizontalFlaps.set_value(true);
 
   chassis.set_drive_pid(16, 127, true);
-  intake.move(127);
+  intake.move(-127);
   chassis.wait_drive();
 
   chassis.set_drive_pid(-10, 127, false);
@@ -208,6 +288,7 @@ void friendlyton()
   chassis.wait_drive();
 
   intake.move(0);
+  horizontalFlaps.set_value(false);
 
   chassis.set_drive_pid(-5, DRIVE_SPEED, false);
   chassis.wait_drive();
@@ -216,14 +297,14 @@ void friendlyton()
   chassis.wait_drive();
 
   chassis.set_drive_pid(25, DRIVE_SPEED, true);
-  intake.move(-127);
+  intake.move(127);
   chassis.wait_drive();
 
   chassis.set_turn_pid(100, TURN_SPEED);
   chassis.wait_drive();
 
   chassis.set_drive_pid(27, DRIVE_SPEED, true);
-  intake.move(127);
+  intake.move(-127);
   chassis.wait_drive();
 
   chassis.set_drive_pid(-10, 127, false);

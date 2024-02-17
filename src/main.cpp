@@ -99,8 +99,8 @@ void initialize()
 
 	// // Configure your chassis controls
 	chassis.toggle_modify_curve_with_controller(false);
-	// chassis.left_curve_function(20);
-	// chassis.right_curve_function(20);
+	chassis.left_curve_function(1);
+	chassis.right_curve_function(1);
 	chassis.set_active_brake(0);		 // Sets the active brake kP. We recommend 0.1.
 	chassis.set_curve_default(0, 0); // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 	default_constants();						 // Set the drive to your own constants from autons.cpp!
@@ -172,7 +172,8 @@ void autonomous()
 	// ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
 
 	// friendlyton();
-	testAuton();
+	// testAuton();
+	descore();
 
 	std::cout << "Autonomous Has Run\n";
 }
@@ -227,7 +228,7 @@ void opcontrol()
 			}
 		}
 
-		if (master.get_digital_new_press(DIGITAL_L1))
+		if (master.get_digital_new_press(DIGITAL_Y))
 		{
 			if (slapperOn)
 			{
@@ -243,13 +244,13 @@ void opcontrol()
 			}
 		}
 
-		if (master.get_digital_new_press(DIGITAL_X))
+		if (master.get_digital_new_press(DIGITAL_L2))
 		{
 			horizontalFlaps.set_value(!horizontalFlapsOut);
 			horizontalFlapsOut = !horizontalFlapsOut;
 		}
 
-		if (master.get_digital_new_press(DIGITAL_Y))
+		if (master.get_digital_new_press(DIGITAL_L1))
 		{
 			verticalFlap.set_value(!verticalFlapOut);
 			verticalFlapOut = !verticalFlapOut;

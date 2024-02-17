@@ -75,6 +75,7 @@ extern "C"
   void competition_initialize(void);
   void opcontrol(void);
   void testAuton(void);
+  void descore(void);
 #ifdef __cplusplus
 }
 #endif
