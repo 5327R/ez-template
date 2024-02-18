@@ -70,11 +70,11 @@ void default_constants()
 {
   chassis.set_slew_min_power(80, 80);
   chassis.set_slew_distance(7, 7);
-  chassis.set_pid_constants(&chassis.headingPID, 15, 0, 20, 0);
+  chassis.set_pid_constants(&chassis.headingPID, 5, 0, 30, 0);
   chassis.set_pid_constants(&chassis.forward_drivePID, 1, 0, 6.7, 0);
   chassis.set_pid_constants(&chassis.backward_drivePID, 1, 0, 6.7, 0);
-  chassis.set_pid_constants(&chassis.turnPID, 7, 0, 59, 15); // 10 0 75
-  chassis.set_pid_constants(&chassis.swingPID, 10, 0, 75, 0);
+  chassis.set_pid_constants(&chassis.turnPID, 5, 0, 48, 15); // 10 0 75
+  chassis.set_pid_constants(&chassis.swingPID, 10, 0, 120, 0);
 }
 
 void exit_condition_defaults()
@@ -86,19 +86,37 @@ void exit_condition_defaults()
 
 void modified_exit_condition()
 {
-  chassis.set_exit_condition(chassis.turn_exit, 15, 3, 100, 7, 200, 500);
-  chassis.set_exit_condition(chassis.swing_exit, 15, 3, 100, 7, 200, 500);
-  chassis.set_exit_condition(chassis.drive_exit, 15, 50, 100, 150, 200, 500);
+  chassis.set_exit_condition(chassis.turn_exit, 100, 3, 400, 7, 200, 500);
+  chassis.set_exit_condition(chassis.swing_exit, 100, 3, 400, 7, 200, 500);
+  chassis.set_exit_condition(chassis.drive_exit, 100, 50, 200, 150, 200, 500);
 }
 
 // Custom Autons
 // ---------------------------------------------------------------------------------------------------------------------
 void testAuton()
 {
-  drive(72);
+  drive(20);
   complete();
 
-  drive(-72);
+  turn(90);
+  complete();
+
+  drive(20);
+  complete();
+
+  turn(270);
+  complete();
+
+  drive(20);
+  complete();
+
+  turn(180);
+  complete();
+
+  drive(20);
+  complete();
+
+  turn(0);
   complete();
 }
 
@@ -220,93 +238,83 @@ void descore()
 
 void friendlyton()
 {
+  modified_exit_condition();
+  chassis.set_angle(-90);
+  // intake first triball
+  intake.move(127);
   verticalFlap.set_value(true);
-  pros::delay(500);
+  pros::delay(200);
   verticalFlap.set_value(false);
-  intake.move(127);
-  chassis.set_swing_pid(ez::LEFT_SWING, 45, 127); // swings out of start position
-  chassis.wait_drive();
 
-  chassis.set_drive_pid(18, DRIVE_SPEED, true); // drives 18 inches toward goal
-  chassis.wait_drive();
+  // push matchload to goal
+  drive_s(-28, 80);
+  pros::delay(700);
+  swingl_s(-120, 110);
+  pros::delay(300);
+  drive_s(-26, 100);
+  pros::delay(700);
+  swingl_s(-180, 110);
+  complete();
 
-  chassis.set_swing_pid(ez::RIGHT_SWING, 20, 127); // lines up with goal to score
-  chassis.wait_drive();
+  drive_s(5, 127);
+  pros::delay(300);
 
-  intake.move(-127); // starts outaking the tribal with intake.
-  chassis.wait_drive();
+  turn_s(-340, 127);
+  complete();
 
-  chassis.set_drive_pid(-5, DRIVE_SPEED, false); // pulls back 5 in
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(10, 127, false); // rushes forward
-  chassis.wait_drive();
-
-  intake.move(0); // stops intake
-
-  chassis.set_drive_pid(-10, DRIVE_SPEED, false);
-  chassis.wait_drive();
-
-  chassis.set_turn_pid(-69, TURN_SPEED); // lines up to center field
-  chassis.wait_drive();
-  // 47
-  chassis.set_drive_pid(47, DRIVE_SPEED, true); // grabs midfield triball
-  intake.move(127);
-  chassis.wait_drive();
-  // 0
-  chassis.set_turn_pid(17, TURN_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(15, DRIVE_SPEED, true);
-  chassis.wait_drive();
-
-  chassis.set_swing_pid(ez::LEFT_SWING, 90, 60);
-  chassis.wait_drive();
-  horizontalFlaps.set_value(true);
-
-  chassis.set_drive_pid(16, 127, true);
   intake.move(-127);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(-10, 127, false);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(10, 127, false);
-  chassis.wait_drive();
-
-  intake.move(0);
-  horizontalFlaps.set_value(false);
-
-  chassis.set_drive_pid(-5, DRIVE_SPEED, false);
-  chassis.wait_drive();
-
-  chassis.set_turn_pid(-90, TURN_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(25, DRIVE_SPEED, true);
-  intake.move(127);
-  chassis.wait_drive();
-
-  chassis.set_turn_pid(100, TURN_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(27, DRIVE_SPEED, true);
-  intake.move(-127);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(-10, 127, false);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(10, 127, false);
-  chassis.wait_drive();
-
+  pros::delay(700);
   intake.move(0);
 
-  // chassis.set_swing_pid(ez::LEFT_SWING, 90, SWING_SPEED);
-  // chassis.wait_drive();
+  turn_s(-170, 127);
+  complete();
+  drive_s(-18, 127);
+  complete();
 
-  // intake.move(127);
-  // chassis.wait_drive();
+  // drive_s(10, 127); //second push
+  // complete();
+
+  // drive_s(-14, 127);
+  // complete();
+
+  swingl_s(-45, 100); // grab md
+  complete();
+
+  intake.move(127);
+  drive_s(52, 127);
+  complete();
+  intake.move(0);
+
+  swingr_s(-90, 127);
+  complete();
+
+  drive_s(-12, 127);
+  complete();
+
+  turn_s(90, 127);
+  complete();
+
+  intake.move(-127);
+  pros::delay(300);
+  drive_s(24, 127);
+  complete();
+  intake.move(0);
+
+  swingl_s(-90, 127);
+  complete();
+
+  intake.move(127);
+  drive_s(24, 127);
+  complete();
+
+  turn(45);
+  pros::delay(500);
+  drive_s(10, 127);
+  pros::delay(100);
+  intake.move(-127);
+  swingl_s(90, 127);
+  pros::delay(200);
+  drive_s(24, 127);
 }
 
 void oppton()
@@ -423,103 +431,100 @@ void oppton_noflaps()
   complete();
 }
 
-// void skillsProg()
-// {
-//   // open blocker
-//   blocker.set_value(true);
-//   pros::delay(1000); // wait for blocker to open
-//   // turn on slapper for 30 sec
-//   slapper.move(127);
-//   pros::delay(35000);
+void skillsProg()
+{
 
-//   // run intake for 0.5 seconds as warning
-//   intake.move(127);
-//   pros::delay(500);
-//   intake.move(0);
-//   // stop slapper
-//   slapper.move(0);
-//   blocker.set_value(false);
+  // turn on slapper for 30 sec
+  slapper.move(127);
+  pros::delay(1000);
 
-//   // -------------------- AFTER MATCH-LOADING -------------------- //
-//   // re-calibrate imu after lineup with
-//   swing_l(-45);
-//   complete();
-//   chassis.set_angle(-42);
-//   // intake.move(127);
+  // run intake for 0.5 seconds as warning
+  intake.move(127);
+  pros::delay(500);
+  intake.move(0);
+  // stop slapper
+  slapper.move(0);
 
-//   // start movement
-//   swing_l(10);
-//   complete();
-//   drive(10);
-//   pros::delay(250);
-//   swing_r(0);
+  // -------------------- AFTER MATCH-LOADING -------------------- //
+  // re-calibrate imu after lineup with
+  swing_l(-45);
+  complete();
+  // chassis.set_angle(-42);
+  // intake.move(127);
 
-//   slapper.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_HOLD);
-//   slapper.move(127);
-//   pros::delay(650);
-//   slapper.move(0);
+  // start movement
+  swing_l(10);
+  complete();
+  drive(10);
+  pros::delay(250);
+  swing_r(0);
 
-//   drive_s(65, 75);
-//   complete();
-//   slapper.set_brake_mode(pros::motor_brake_mode_e::E_MOTOR_BRAKE_COAST);
+  slapper.set_brake_modes(pros::motor_brake_mode_e::E_MOTOR_BRAKE_HOLD);
+  slapper.move(127);
+  pros::delay(650);
+  slapper.move(0);
 
-//   swing_r(-45);
-//   complete();
+  drive_s(65, 75);
+  complete();
+  slapper.set_brake_modes(pros::motor_brake_mode_e::E_MOTOR_BRAKE_COAST);
 
-//   drive(24);
-//   pros::delay(500);
-//   swing_r(-90);
-//   complete();
+  swing_r(-45);
+  complete();
 
-//   intake.move(127);
-//   drive(12);
-//   pros::delay(500);
-//   drive(-6);
-//   pros::delay(500);
-//   swing_r(30);
-//   complete();
-//   intake.move(0);
+  drive(24);
+  pros::delay(500);
+  swing_r(-90);
+  complete();
 
-//   drive(-38);
-//   complete();
+  intake.move(127);
+  drive(12);
+  pros::delay(500);
+  drive(-6);
+  pros::delay(500);
+  swing_r(30);
+  complete();
+  intake.move(0);
 
-//   swing_r(90);
-//   complete();
+  drive(-38);
+  complete();
 
-//   drive(-20);
-//   complete();
+  swing_r(90);
+  complete();
 
-//   turn(180);
-//   complete();
+  drive(-20);
+  complete();
 
-//   // -------------------- FINAL PUSHES INTO GOAL -------------------- //
-//   intake.move(0);
-//   horizontalFlaps.set_value(true);
+  turn(180);
+  complete();
 
-//   drive(-30);
-//   complete();
-//   horizontalFlaps.set_value(false);
-//   drive(25);
-//   complete();
-//   turn(270);
-//   complete();
-//   drive(20);
-//   complete();
-//   turn(215);
-//   complete();
-//   horizontalFlaps.set_value(true);
-//   drive_s(-22, 127);
-//   pros::delay(400);
-//   swingl_s(180, 127);
-//   pros::delay(400);
-//   drive_s(-10, 127);
-//   complete();
-//   drive_s(10, 127);
-//   complete();
-//   drive_s(-10, 127);
-//   complete();
-//   drive_s(10, 127);
-// }
+  // -------------------- FINAL PUSHES INTO GOAL -------------------- //
+  intake.move(0);
+  horizontalFlaps.set_value(true);
+
+  drive(-30);
+  complete();
+  horizontalFlaps.set_value(false);
+  drive(25);
+  complete();
+  turn(270);
+  complete();
+  drive(20);
+  complete();
+  turn(215);
+  complete();
+  horizontalFlaps.set_value(true);
+  drive_s(-22, 127);
+  pros::delay(400);
+  swingl_s(180, 127);
+  pros::delay(400);
+  drive_s(-10, 127);
+  complete();
+  drive_s(10, 127);
+  complete();
+  drive_s(-10, 127);
+  complete();
+  drive_s(10, 127);
+}
 
 // Simple Examples
 // ---------------------------------------------------------------------------------------------------------------------

@@ -8,7 +8,7 @@ pros::ADIDigitalOut verticalFlap('E');
 pros::ADIDigitalOut horizontalFlaps('F');
 pros::Motor slapper1(-14);
 pros::Motor slapper2(15);
-
+pros::MotorGroup slapper({slapper1, slapper2});
 bool slapperOn = false;
 bool verticalFlapOut = false;
 bool horizontalFlapsOut = false;
@@ -175,7 +175,8 @@ void autonomous()
 	// testAuton();
 	// descore();
 	// oppton();
-	oppton_noflaps();
+	// oppton_noflaps();
+	skillsProg();
 
 	std::cout << "Autonomous Has Run\n";
 }
@@ -197,7 +198,7 @@ void opcontrol()
 {
 	// This is preference to what you like to drive on.
 	chassis.set_drive_brake(MOTOR_BRAKE_COAST);
-	intake.move(0);
+	// intake.move(0);
 
 	while (true)
 	{

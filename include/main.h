@@ -95,6 +95,7 @@ extern pros::ADIDigitalOut verticalFlap;
 extern pros::ADIDigitalOut horizontalFlaps;
 extern pros::Motor slapper1;
 extern pros::Motor slapper2;
+extern pros::MotorGroup slapper;
 
 extern bool flywheel_on;
 extern bool flaps_out;
