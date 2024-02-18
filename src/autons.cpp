@@ -45,6 +45,7 @@
   {                       \
     chassis.wait_drive(); \
   } while (0)
+#define TILE 24
 
 /////
 // For instalattion, upgrading, documentations and tutorials, check out website!
@@ -94,28 +95,10 @@ void modified_exit_condition()
 // ---------------------------------------------------------------------------------------------------------------------
 void testAuton()
 {
-  drive(24);
+  drive(72);
   complete();
 
-  turn(90);
-  complete();
-
-  drive(24);
-  complete();
-
-  turn(270);
-  complete();
-
-  drive(24);
-  complete();
-
-  turn(180);
-  complete();
-
-  drive(24);
-  complete();
-
-  turn(0);
+  drive(-72);
   complete();
 }
 
@@ -188,14 +171,16 @@ void descore()
   chassis.set_drive_pid(16, DRIVE_SPEED, true); // drives 18 inches toward goal
   chassis.wait_drive();
 
-  intake.move(-127);
-  pros::delay(700);
-  intake.move(0);
+  chassis.set_turn_pid(-10, 100); // lines up with goal to score
+  chassis.wait_drive();
+
+  verticalFlap.set_value(false);
 
   chassis.set_turn_pid(30, 127); // lines up with goal to score
   chassis.wait_drive();
 
-  verticalFlap.set_value(false);
+  intake.move(-127);
+  pros::delay(700);
 
   chassis.set_drive_pid(30, 127, false); // second push
   chassis.wait_drive();
@@ -215,11 +200,13 @@ void descore()
   chassis.set_turn_pid(-75, 127); // lines up with goal to score
   chassis.wait_drive();
 
+  intake.move(0);
   intake.move(127);
+
   chassis.set_drive_pid(46, 127, true); // second push
   chassis.wait_drive();
 
-  chassis.set_swing_pid(ez::LEFT_SWING, 90, 110); // swings out of start position
+  chassis.set_swing_pid(ez::LEFT_SWING, 90, 100); // swings out of start position
   chassis.wait_drive();
 
   intake.move(-127);
@@ -324,36 +311,116 @@ void friendlyton()
 
 void oppton()
 {
-  chassis.set_swing_pid(ez::RIGHT_SWING, -45, SWING_SPEED);
-  chassis.wait_drive();
-
-  chassis.set_drive_pid(17, DRIVE_SPEED, true);
-  chassis.wait_drive();
-
-  chassis.set_swing_pid(ez::LEFT_SWING, 0, 127);
-  pros::delay(200);
+  // intake deployment
+  verticalFlap.set_value(true);
+  pros::delay(500);
+  verticalFlap.set_value(false);
   intake.move(127);
-  chassis.wait_drive();
 
-  chassis.set_drive_pid(-3, DRIVE_SPEED, true);
-  chassis.wait_drive();
+  // 3 tiles forward
+  drive(2 * TILE);
+  complete();
 
-  chassis.set_drive_pid(10, 127, true);
-  chassis.wait_drive();
+  // turn to opp goal
+  turn(-50);
+  complete();
 
+  // deposit triball in front of opp goal
+  intake.move(-127);
+  pros::delay(700);
   intake.move(0);
 
-  chassis.set_swing_pid(ez::LEFT_SWING, -45, 127);
-  chassis.wait_drive();
+  // grab mid triball
+  complete();
+  intake.move(127);
+  turn(90);
+  complete();
+  swing_r(0);
+  complete();
+  pros::delay(100);
 
-  chassis.set_drive_pid(-23, DRIVE_SPEED, true);
-  chassis.wait_drive();
+  // flaps over barrier
+  turn(-90);
+  complete();
+  horizontalFlaps.set_value(true);
+  drive_s(-0.6 * TILE, 127);
+  complete();
+  // chassis.set_angle(-90);
+  drive(0.6 * TILE);
+  horizontalFlaps.set_value(false);
+  complete();
+  turn(0);
+  complete();
 
-  chassis.set_swing_pid(ez::LEFT_SWING, -90, 127);
-  chassis.wait_drive();
+  // descore
+  drive(-0.7 * TILE);
+  complete();
+  swing_r(90);
+  complete();
+  drive(-1.3 * TILE);
+  complete();
+  turn(180);
+  complete();
+  drive(0.5 * TILE);
+  complete();
+  verticalFlap.set_value(true);
+  swingr_s(90, 100);
+  complete();
+  turn(100);
+  complete();
+  intake.move(-127);
+  drive(1.55 * TILE);
+  complete();
+}
 
-  chassis.set_drive_pid(-36, DRIVE_SPEED, true);
-  chassis.wait_drive();
+void oppton_noflaps()
+{
+  // intake deployment
+  verticalFlap.set_value(true);
+  pros::delay(500);
+  verticalFlap.set_value(false);
+  intake.move(127);
+
+  // 3 tiles forward
+  drive(2 * TILE);
+  complete();
+
+  // turn to opp goal
+  turn(-50);
+  complete();
+
+  // deposit triball in front of opp goal
+  intake.move(-100);
+  pros::delay(700);
+  intake.move(0);
+
+  // grab mid triball
+  intake.move(127);
+  turn_s(90, 80);
+  complete();
+  swing_r(0);
+  complete();
+  pros::delay(100);
+
+  // descore
+  drive(-0.7 * TILE);
+  complete();
+  swing_r(90);
+  complete();
+  drive(-1.3 * TILE);
+  complete();
+  turn(180);
+  complete();
+  drive(0.5 * TILE);
+  complete();
+  verticalFlap.set_value(true);
+  swingr_s(90, 100);
+  complete();
+  turn(100);
+  complete();
+  intake.move(-127);
+  drive(37.2);
+  complete();
 }
 
 // void skillsProg()

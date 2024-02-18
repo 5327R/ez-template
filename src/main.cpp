@@ -173,7 +173,9 @@ void autonomous()
 
 	// friendlyton();
 	// testAuton();
-	descore();
+	// descore();
+	// oppton();
+	oppton_noflaps();
 
 	std::cout << "Autonomous Has Run\n";
 }
@@ -195,6 +197,7 @@ void opcontrol()
 {
 	// This is preference to what you like to drive on.
 	chassis.set_drive_brake(MOTOR_BRAKE_COAST);
+	intake.move(0);
 
 	while (true)
 	{
