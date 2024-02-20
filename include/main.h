@@ -77,6 +77,7 @@ extern "C"
   void testAuton(void);
   void descore(void);
   void oppton_noflaps(void);
+  void nakulton(void);
 #ifdef __cplusplus
 }
 #endif

@@ -235,10 +235,9 @@ void descore()
   chassis.set_drive_pid(-20, 127, true); // second push
   chassis.wait_drive();
 }
-
-void friendlyton()
+void nakulton()
 {
-  modified_exit_condition();
+  // modified_exit_condition();
   chassis.set_angle(-90);
   // intake first triball
   intake.move(127);
@@ -277,18 +276,91 @@ void friendlyton()
   // drive_s(-14, 127);
   // complete();
 
+  swingl_s(-75, 100); // grab md
+  complete();
+
+  intake.move(127);
+  drive_s(46, 127);
+  complete();
+  intake.move(0);
+
+  turn(50);
+  complete();
+
+  intake.move(-127);
+  pros::delay(500);
+  drive(5);
+  complete();
+  intake.move(0);
+
+  turn(-20);
+  complete();
+
+  intake.move(127);
+  drive(20);
+  complete();
+  swingr_s(-90, 110);
+  complete();
+
+  horizontalFlaps.set_value(true);
+
+  drive_s(-48, 127);
+}
+void friendlyton()
+{
+  // modified_exit_condition();
+  chassis.set_angle(-90);
+  // intake first triball
+  intake.move(127);
+  verticalFlap.set_value(true);
+  pros::delay(200);
+  verticalFlap.set_value(false);
+
+  // push matchload to goal
+  drive_s(-28, 80);
+  complete();
+  swingl_s(-120, 110);
+  complete();
+  drive_s(-26, 100);
+  complete();
+  swingl_s(-180, 110);
+  complete();
+
+  drive_s(5, 127);
+  complete();
+
+  turn_s(-340, 127);
+  complete();
+
+  intake.move(-127);
+  pros::delay(700);
+  intake.move(0);
+
+  turn_s(-170, 127);
+  complete();
+  drive_s(-18, 127);
+  complete();
+
+  // drive_s(10, 127); //second push
+  // complete();
+
+  // drive_s(-14, 127);
+  // complete();
+
   swingl_s(-45, 100); // grab md
   complete();
 
   intake.move(127);
   drive_s(52, 127);
   complete();
-  intake.move(0);
 
   swingr_s(-90, 127);
   complete();
 
   drive_s(-12, 127);
+  complete();
+
+  drive_s(5, 127);
   complete();
 
   turn_s(90, 127);
@@ -300,21 +372,23 @@ void friendlyton()
   complete();
   intake.move(0);
 
-  swingl_s(-90, 127);
-  complete();
+  drive(-10);
 
-  intake.move(127);
-  drive_s(24, 127);
-  complete();
+  // swingl_s(-100, 127);
+  // complete();
 
-  turn(45);
-  pros::delay(500);
-  drive_s(10, 127);
-  pros::delay(100);
-  intake.move(-127);
-  swingl_s(90, 127);
-  pros::delay(200);
-  drive_s(24, 127);
+  // intake.move(127);
+  // drive_s(10, 127);
+  // complete();
+
+  // turn(45);
+  // pros::delay(500);
+  // drive_s(10, 127);
+  // pros::delay(100);
+  // intake.move(-127);
+  // swingl_s(90, 127);
+  // pros::delay(200);
+  // drive_s(24, 127);
 }
 
 void oppton()

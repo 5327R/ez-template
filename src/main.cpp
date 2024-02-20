@@ -171,12 +171,13 @@ void autonomous()
 
 	// ez::as::auton_selector.call_selected_auton(); // Calls selected auton from autonomous selector.
 
-	// friendlyton();
-	// testAuton();
-	// descore();
+	friendlyton();
+	//  testAuton();
+	//  descore();
 	// oppton();
 	// oppton_noflaps();
-	skillsProg();
+	// skillsProg();
+	// nakulton();
 
 	std::cout << "Autonomous Has Run\n";
 }
@@ -197,7 +198,7 @@ void autonomous()
 void opcontrol()
 {
 	// This is preference to what you like to drive on.
-	chassis.set_drive_brake(MOTOR_BRAKE_COAST);
+	chassis.set_drive_brake(MOTOR_BRAKE_BRAKE);
 	// intake.move(0);
 
 	while (true)
@@ -232,21 +233,23 @@ void opcontrol()
 			}
 		}
 
-		if (master.get_digital_new_press(DIGITAL_Y))
-		{
-			if (slapperOn)
-			{
-				slapper1.move(0);
-				slapper2.move(0);
-				slapperOn = false;
-			}
-			else
-			{
-				slapper1.move(100);
-				slapper2.move(100);
-				slapperOn = true;
-			}
-		}
+		// if (master.get_digital_new_press(DIGITAL_Y))
+		// {
+		// 	if (slapperOn)
+		// 	{
+		// 		slapper1.move(0);
+		// 		slapper2.move(0);
+		// 		slapperOn = false;
+		// 		chassis.set_drive_brake(MOTOR_BRAKE_COAST);
+		// 	}
+		// 	else
+		// 	{
+		// 		chassis.set_drive_brake(MOTOR_BRAKE_HOLD);
+		// 		slapper1.move(100);
+		// 		slapper2.move(100);
+		// 		slapperOn = true;
+		// 	}
+		// }
 
 		if (master.get_digital_new_press(DIGITAL_L2))
 		{
