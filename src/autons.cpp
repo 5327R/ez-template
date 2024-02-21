@@ -40,11 +40,18 @@
   {                                    \
     chassis.pid_drive_set(x, y, true); \
   } while (0)
-#define d(x, y, z)                  \
-  do                                \
-  {                                 \
-    chassis.pid_drive_set(x, y, z); \
-    chassis.pid_wait(); \
+#define dr(x, y, z)                       \
+  do                                      \
+  {                                       \
+    chassis.pid_drive_set(x, y, z, true); \
+    chassis.pid_wait();                   \
+  } while (0)
+
+#define trn(x, y, z)               \
+  do                               \
+  {                                \
+    chassis.pid_turn_set(x, y, z); \
+    chassis.pid_wait();            \
   } while (0)
 #define complete()      \
   do                    \
@@ -86,6 +93,17 @@ void default_constants()
   chassis.slew_drive_constants_set(7_in, 80);
 }
 
+void sus_constants()
+{
+  chassis.pid_heading_constants_set(5, 0, 30, 0);
+  chassis.pid_drive_constants_forward_set(20, 0, 20, 0);
+  chassis.pid_drive_constants_backward_set(20, 0, 20, 0);
+  chassis.pid_turn_constants_set(5, 0, 48, 15); // 10 0 75
+  chassis.pid_swing_constants_set(10, 0, 120, 0);
+
+  chassis.slew_drive_constants_set(7_in, 80);
+}
+
 void exit_condition_defaults()
 {
   chassis.pid_turn_exit_condition_set(100, 3, 500, 7, 500, 500);
@@ -104,29 +122,22 @@ void modified_exit_condition()
 // ---------------------------------------------------------------------------------------------------------------------
 void testAuton()
 {
-  drive(20);
-  complete();
+  sus_constants();
+  dr(20, 127, false);
 
-  turn(90);
-  complete();
+  // trn(90, 127, true);
 
-  drive(20);
-  complete();
+  // dr(20, 127, false);
 
-  turn(270);
-  complete();
+  // trn(270, 127, false);
 
-  drive(20);
-  complete();
+  // dr(20, 127, false);
 
-  turn(180);
-  complete();
+  // trn(180, 127, false);
 
-  drive(20);
-  complete();
+  // dr(20, 127, false);
 
-  turn(0);
-  complete();
+  // trn(0, 127, false);
 }
 
 void oppsteal()
