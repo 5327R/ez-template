@@ -1,40 +1,55 @@
 #include "main.h"
-#define swing_l(x)                                                             \
-  do {                                                                         \
-    chassis.pid_swing_set(ez::LEFT_SWING, x, SWING_SPEED);                     \
+#define swing_l(x)                                         \
+  do                                                       \
+  {                                                        \
+    chassis.pid_swing_set(ez::LEFT_SWING, x, SWING_SPEED); \
   } while (0)
-#define swingl_s(x, y)                                                         \
-  do {                                                                         \
-    chassis.pid_swing_set(ez::LEFT_SWING, x, y);                               \
+#define swingl_s(x, y)                           \
+  do                                             \
+  {                                              \
+    chassis.pid_swing_set(ez::LEFT_SWING, x, y); \
   } while (0)
-#define swing_r(x)                                                             \
-  do {                                                                         \
-    chassis.pid_swing_set(ez::RIGHT_SWING, x, SWING_SPEED);                    \
+#define swing_r(x)                                          \
+  do                                                        \
+  {                                                         \
+    chassis.pid_swing_set(ez::RIGHT_SWING, x, SWING_SPEED); \
   } while (0)
-#define swingr_s(x, y)                                                         \
-  do {                                                                         \
-    chassis.pid_swing_set(ez::RIGHT_SWING, x, y);                              \
+#define swingr_s(x, y)                            \
+  do                                              \
+  {                                               \
+    chassis.pid_swing_set(ez::RIGHT_SWING, x, y); \
   } while (0)
 
-#define turn(x)                                                                \
-  do {                                                                         \
-    chassis.pid_turn_set(x, TURN_SPEED);                                       \
+#define turn(x)                          \
+  do                                     \
+  {                                      \
+    chassis.pid_turn_set(x, TURN_SPEED); \
   } while (0)
-#define turn_s(x, y)                                                           \
-  do {                                                                         \
-    chassis.pid_turn_set(x, y);                                                \
+#define turn_s(x, y)            \
+  do                            \
+  {                             \
+    chassis.pid_turn_set(x, y); \
   } while (0)
-#define drive(x)                                                               \
-  do {                                                                         \
-    chassis.pid_drive_set(x, DRIVE_SPEED, true);                               \
+#define drive(x)                                 \
+  do                                             \
+  {                                              \
+    chassis.pid_drive_set(x, DRIVE_SPEED, true); \
   } while (0)
-#define drive_s(x, y)                                                          \
-  do {                                                                         \
-    chassis.pid_drive_set(x, y, true);                                         \
+#define drive_s(x, y)                  \
+  do                                   \
+  {                                    \
+    chassis.pid_drive_set(x, y, true); \
   } while (0)
-#define complete()                                                             \
-  do {                                                                         \
-    chassis.pid_wait();                                                        \
+#define d(x, y, z)                  \
+  do                                \
+  {                                 \
+    chassis.pid_drive_set(x, y, z); \
+    chassis.pid_wait(); \
+  } while (0)
+#define complete()      \
+  do                    \
+  {                     \
+    chassis.pid_wait(); \
   } while (0)
 #define TILE 24
 
@@ -60,7 +75,8 @@ const int SWING_SPEED = 90;
 // game objects, or with lifts up vs down. If the objects are light or the cog
 // doesn't change much, then there isn't a concern here.
 
-void default_constants() {
+void default_constants()
+{
   chassis.pid_heading_constants_set(5, 0, 30, 0);
   chassis.pid_drive_constants_forward_set(1, 0, 6.7, 0);
   chassis.pid_drive_constants_backward_set(1, 0, 6.7, 0);
@@ -70,13 +86,15 @@ void default_constants() {
   chassis.slew_drive_constants_set(7_in, 80);
 }
 
-void exit_condition_defaults() {
+void exit_condition_defaults()
+{
   chassis.pid_turn_exit_condition_set(100, 3, 500, 7, 500, 500);
   chassis.pid_swing_exit_condition_set(100, 3, 500, 7, 500, 500);
   chassis.pid_drive_exit_condition_set(80, 50, 300, 150, 500, 500);
 }
 
-void modified_exit_condition() {
+void modified_exit_condition()
+{
   chassis.pid_turn_exit_condition_set(100, 3, 400, 7, 200, 500);
   chassis.pid_swing_exit_condition_set(100, 3, 400, 7, 200, 500);
   chassis.pid_drive_exit_condition_set(100, 50, 200, 150, 200, 500);
@@ -84,7 +102,8 @@ void modified_exit_condition() {
 
 // Custom Autons
 // ---------------------------------------------------------------------------------------------------------------------
-void testAuton() {
+void testAuton()
+{
   drive(20);
   complete();
 
@@ -110,7 +129,8 @@ void testAuton() {
   complete();
 }
 
-void oppsteal() {
+void oppsteal()
+{
   chassis.pid_swing_set(ez::RIGHT_SWING, -45, SWING_SPEED);
   chassis.pid_wait();
 
@@ -160,15 +180,16 @@ void oppsteal() {
   chassis.pid_turn_set(-90, TURN_SPEED);
   chassis.pid_wait();
 
-  horizontalFlaps.set_value(true);
+  horizontalFlaps.set(true);
   chassis.pid_drive_set(-20, 127, false);
   chassis.pid_wait();
 
-  horizontalFlaps.set_value(false);
+  horizontalFlaps.set(false);
 }
 
-void descore() {
-  verticalFlap.set_value(true);
+void descore()
+{
+  verticalFlap.set(true);
   pros::delay(500);
   intake.move(127);
   chassis.pid_turn_set(60, 127); // swings out of start position
@@ -180,7 +201,7 @@ void descore() {
   chassis.pid_turn_set(-10, 100); // lines up with goal to score
   chassis.pid_wait();
 
-  verticalFlap.set_value(false);
+  verticalFlap.set(false);
 
   chassis.pid_turn_set(30, 127); // lines up with goal to score
   chassis.pid_wait();
@@ -224,14 +245,15 @@ void descore() {
   chassis.pid_drive_set(-20, 127, true); // second push
   chassis.pid_wait();
 }
-void nakulton() {
+void nakulton()
+{
   // modified_exit_condition();
   chassis.drive_angle_set(-90);
   // intake first triball
   intake.move(127);
-  verticalFlap.set_value(true);
+  verticalFlap.set(true);
   pros::delay(200);
-  verticalFlap.set_value(false);
+  verticalFlap.set(false);
 
   // push matchload to goal
   drive_s(-28, 80);
@@ -290,18 +312,19 @@ void nakulton() {
   swingr_s(-90, 110);
   complete();
 
-  horizontalFlaps.set_value(true);
+  horizontalFlaps.set(true);
 
   drive_s(-48, 127);
 }
-void friendlyton() {
+void friendlyton()
+{
   // modified_exit_condition();
   chassis.drive_angle_set(-90);
   // intake first triball
   intake.move(127);
-  verticalFlap.set_value(true);
+  verticalFlap.set(true);
   pros::delay(200);
-  verticalFlap.set_value(false);
+  verticalFlap.set(false);
 
   // push matchload to goal
   drive_s(-28, 80);
@@ -378,11 +401,12 @@ void friendlyton() {
   // drive_s(24, 127);
 }
 
-void oppton() {
+void oppton()
+{
   // intake deployment
-  verticalFlap.set_value(true);
+  verticalFlap.set(true);
   pros::delay(500);
-  verticalFlap.set_value(false);
+  verticalFlap.set(false);
   intake.move(127);
 
   // 3 tiles forward
@@ -410,12 +434,12 @@ void oppton() {
   // flaps over barrier
   turn(-90);
   complete();
-  horizontalFlaps.set_value(true);
+  horizontalFlaps.set(true);
   drive_s(-0.6 * TILE, 127);
   complete();
   // chassis.drive_angle_set(-90);
   drive(0.6 * TILE);
-  horizontalFlaps.set_value(false);
+  horizontalFlaps.set(false);
   complete();
   turn(0);
   complete();
@@ -431,7 +455,7 @@ void oppton() {
   complete();
   drive(0.5 * TILE);
   complete();
-  verticalFlap.set_value(true);
+  verticalFlap.set(true);
   swingr_s(90, 100);
   complete();
   turn(100);
@@ -441,11 +465,12 @@ void oppton() {
   complete();
 }
 
-void oppton_noflaps() {
+void oppton_noflaps()
+{
   // intake deployment
-  verticalFlap.set_value(true);
+  verticalFlap.set(true);
   pros::delay(500);
-  verticalFlap.set_value(false);
+  verticalFlap.set(false);
   intake.move(127);
 
   // 3 tiles forward
@@ -480,7 +505,7 @@ void oppton_noflaps() {
   complete();
   drive(0.5 * TILE);
   complete();
-  verticalFlap.set_value(true);
+  verticalFlap.set(true);
   swingr_s(90, 100);
   complete();
   turn(100);
@@ -490,7 +515,8 @@ void oppton_noflaps() {
   complete();
 }
 
-void skillsProg() {
+void skillsProg()
+{
 
   // turn on slapper for 30 sec
   slapper.move(127);
@@ -557,11 +583,11 @@ void skillsProg() {
 
   // -------------------- FINAL PUSHES INTO GOAL -------------------- //
   intake.move(0);
-  horizontalFlaps.set_value(true);
+  horizontalFlaps.set(true);
 
   drive(-30);
   complete();
-  horizontalFlaps.set_value(false);
+  horizontalFlaps.set(false);
   drive(25);
   complete();
   turn(270);
@@ -570,7 +596,7 @@ void skillsProg() {
   complete();
   turn(215);
   complete();
-  horizontalFlaps.set_value(true);
+  horizontalFlaps.set(true);
   drive_s(-22, 127);
   pros::delay(400);
   swingl_s(180, 127);
@@ -590,7 +616,8 @@ void skillsProg() {
 ///
 // Drive Example
 ///
-void drive_example() {
+void drive_example()
+{
   // The first parameter is target inches
   // The second parameter is max speed the robot will drive at
   // The third parameter is a boolean (true or false) for enabling/disabling a
@@ -635,7 +662,8 @@ void drive_example() {
 ///
 // Turn Example
 ///
-void turn_example() {
+void turn_example()
+{
   // The first parameter is target degrees
   // The second parameter is max speed the robot will drive at
 
@@ -652,7 +680,8 @@ void turn_example() {
 ///
 // Combining Turn + Drive
 ///
-void drive_and_turn() {
+void drive_and_turn()
+{
   chassis.pid_drive_set(24, DRIVE_SPEED, true);
   chassis.pid_wait();
 
@@ -672,7 +701,8 @@ void drive_and_turn() {
 ///
 // Wait Until and Changing Max Speed
 ///
-void pid_wait_until_change_speed() {
+void pid_wait_until_change_speed()
+{
   // pid_wait_until will wait until the robot gets to a desired position
 
   // When the robot gets to 6 inches, the robot will travel the remaining
@@ -706,7 +736,8 @@ void pid_wait_until_change_speed() {
 ///
 // Swing Example
 ///
-void swing_example() {
+void swing_example()
+{
   // The first parameter is ez::LEFT_SWING or ez::RIGHT_SWING
   // The second parameter is target degrees
   // The third parameter is speed of the moving side of the drive
@@ -724,7 +755,8 @@ void swing_example() {
 ///
 // Auto that tests everything
 ///
-void combining_movements() {
+void combining_movements()
+{
   chassis.pid_drive_set(24, DRIVE_SPEED, true);
   chassis.pid_wait();
 
@@ -744,21 +776,25 @@ void combining_movements() {
 ///
 // Interference example
 ///
-void tug(int attempts) {
-  for (int i = 0; i < attempts - 1; i++) {
+void tug(int attempts)
+{
+  for (int i = 0; i < attempts - 1; i++)
+  {
     // Attempt to drive backwards
     printf("i - %i", i);
     chassis.pid_drive_set(-12, 127, false);
     chassis.pid_wait();
 
     // If failsafed...
-    if (chassis.interfered) {
+    if (chassis.interfered)
+    {
       chassis.drive_sensor_reset();
       chassis.pid_drive_set(-2, 20, false);
       pros::delay(1000);
     }
     // If robot successfully drove back, return
-    else {
+    else
+    {
       return;
     }
   }
@@ -766,11 +802,13 @@ void tug(int attempts) {
 
 // If there is no interference, robot will drive forward and turn 90 degrees.
 // If interfered, robot will drive forward and then attempt to drive backwards.
-void interfered_example() {
+void interfered_example()
+{
   chassis.pid_drive_set(24, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  if (chassis.interfered) {
+  if (chassis.interfered)
+  {
     tug(3);
     return;
   }

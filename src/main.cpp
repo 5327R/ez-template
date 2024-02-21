@@ -5,8 +5,10 @@
 // https://ez-robotics.github.io/EZ-Template/
 /////
 pros::Motor intake(-10); //
-pros::ADIDigitalOut verticalFlap('E');
-pros::ADIDigitalOut horizontalFlaps('F');
+// pros::ADIDigitalOut verticalFlap('E');
+// pros::ADIDigitalOut horizontalFlaps('F');
+ez::Piston verticalFlap('E');
+ez::Piston horizontalFlaps('F');
 pros::Motor slapper1(-14);
 pros::Motor slapper2(15);
 pros::MotorGroup slapper({slapper1, slapper2});
@@ -129,6 +131,7 @@ void initialize() {
   // Initialize chassis and auton selector
   chassis.initialize();
   ez::as::initialize();
+  master.rumble(".");
 }
 
 /**
@@ -244,15 +247,17 @@ void opcontrol() {
     // 	}
     // }
 
-    if (master.get_digital_new_press(DIGITAL_L2)) {
-      horizontalFlaps.set_value(!horizontalFlapsOut);
-      horizontalFlapsOut = !horizontalFlapsOut;
-    }
+    horizontalFlaps.button_toggle(master.get_digital(DIGITAL_L2));
+    verticalFlap.button_toggle(master.get_digital(DIGITAL_L1));
+    // if (master.get_digital_new_press(DIGITAL_L2)) {
+    //   horizontalFlaps.set_value(!horizontalFlapsOut);
+    //   horizontalFlapsOut = !horizontalFlapsOut;
+    // }
 
-    if (master.get_digital_new_press(DIGITAL_L1)) {
-      verticalFlap.set_value(!verticalFlapOut);
-      verticalFlapOut = !verticalFlapOut;
-    }
+    // if (master.get_digital_new_press(DIGITAL_L1)) {
+    //   verticalFlap.set_value(!verticalFlapOut);
+    //   verticalFlapOut = !verticalFlapOut;
+    // }
 
     pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!
                                        // Keep this ez::util::DELAY_TIME
