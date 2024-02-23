@@ -68,21 +68,16 @@ Drive chassis(
 
 // Game Loop Functions
 // --------------------------------------------------------------------------------------------------------------------------------
-void autonSelectTask()
-{
-  while (true)
-  {
-    if (master.get_digital_new_press(DIGITAL_RIGHT))
-    {
+void autonSelectTask() {
+  while (true) {
+    if (master.get_digital_new_press(DIGITAL_RIGHT)) {
       std::cout << "page up\n";
       ez::as::page_up();
     }
   }
 }
-void debugDataTask()
-{
-  while (true)
-  {
+void debugDataTask() {
+  while (true) {
     std::cout << chassis.imu.get_heading() << std::endl;
     pros::delay(100);
   }
@@ -95,8 +90,7 @@ void debugDataTask()
  * to keep execution time for this mode under a few seconds.
  */
 // --------------------------------------------------------------------------------------------------------------------------------
-void initialize()
-{
+void initialize() {
   // Print our branding over your terminal :D
   // ez::print_ez_template();
 
@@ -110,10 +104,9 @@ void initialize()
   chassis.opcontrol_drive_activebrake_set(
       0.1); // Sets the active brake kP. We recommend 0.1.
   chassis.opcontrol_curve_default_set(
-      0, 0);           // Defaults for curve. If using tank, only the first parameter is
-                       // used. (Comment this line out if you have an SD card!)
+      0, 0); // Defaults for curve. If using tank, only the first parameter is
+             // used. (Comment this line out if you have an SD card!)
   default_constants(); // Set the drive to your own constants from autons.cpp!
-  exit_condition_defaults();
   // pros::Task dataTask(debugDataTask);
 
   // These are already defaulted to these buttons, but you can change the
@@ -125,7 +118,7 @@ void initialize()
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      Auton("(friendlyton) right side ABSOLUTE CLASSIC", friendlyton),
+      Auton("(friendlyton) right side ABSOLUTE CLASSIC", testAuton),
       // Auton("(oppsteal) left side (with matchload and push center ball to
       // other side)", oppsteal), Auton("(oppton) starts on enemy side (match
       // loads)", oppton), Auton("(ProgSkills) Just runs flywheel the whole
@@ -146,8 +139,7 @@ void initialize()
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled()
-{
+void disabled() {
   // . . .
 }
 
@@ -160,8 +152,7 @@ void disabled()
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize()
-{
+void competition_initialize() {
   // . . .
 }
 
@@ -176,8 +167,7 @@ void competition_initialize()
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous()
-{
+void autonomous() {
   chassis.pid_targets_reset();               // Resets PID targets to 0
   chassis.drive_imu_reset();                 // Reset gyro position to 0
   chassis.drive_sensor_reset();              // Reset drive sensors to 0
@@ -186,14 +176,9 @@ void autonomous()
 
   // ez::as::auton_selector
   //     .selected_auton_call(); // Calls selected auton from autonomous
-  //     selector
-  // friendlyton();
-  testAuton();
-  //  descore();
-  // oppton();
-  // oppton_noflaps();
-  // skillsProg();
-  // nakulton();
+
+  // testAuton();
+  skills();
 
   std::cout << "Autonomous Has Run\n";
 }
@@ -211,74 +196,48 @@ void autonomous()
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-void opcontrol()
-{
+void opcontrol() {
   // This is preference to what you like to drive on.
   chassis.drive_brake_set(MOTOR_BRAKE_BRAKE);
   // intake.move(0);
 
-  while (true)
-  {
+  while (true) {
     // chassis.tank(); // Tank control
     chassis.opcontrol_arcade_standard(ez::SPLIT); // Standard split arcade
     // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
     // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
     // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
 
-    if (master.get_digital_new_press(DIGITAL_R1))
-    {
-      if (intake.get_target_velocity() > 0)
-      {
+    if (master.get_digital_new_press(DIGITAL_R1)) {
+      if (intake.get_target_velocity() > 0) {
         intake.move(0);
-      }
-      else
-      {
+      } else {
         intake.move(127);
       }
     }
 
-    if (master.get_digital_new_press(DIGITAL_R2))
-    {
-      if (intake.get_target_velocity() < 0)
-      {
+    if (master.get_digital_new_press(DIGITAL_R2)) {
+      if (intake.get_target_velocity() < 0) {
         intake.move(0);
-      }
-      else
-      {
+      } else {
         intake.move(-127);
       }
     }
 
-    // if (master.get_digital_new_press(DIGITAL_Y))
-    // {
-    // 	if (slapperOn)
-    // 	{
-    // 		slapper1.move(0);
-    // 		slapper2.move(0);
-    // 		slapperOn = false;
-    // 		chassis.set_drive_brake(MOTOR_BRAKE_COAST);
-    // 	}
-    // 	else
-    // 	{
-    // 		chassis.set_drive_brake(MOTOR_BRAKE_HOLD);
-    // 		slapper1.move(100);
-    // 		slapper2.move(100);
-    // 		slapperOn = true;
-    // 	}
-    // }
+    if (master.get_digital_new_press(DIGITAL_Y)) {
+      if (slapperOn) {
+        slapper.move(0);
+        slapperOn = false;
+
+      } else {
+        slapper.move(90);
+        slapperOn = true;
+      }
+    }
 
     horizontalFlaps.button_toggle(master.get_digital(DIGITAL_L2));
     verticalFlap.button_toggle(master.get_digital(DIGITAL_L1));
     hang.button_toggle(master.get_digital(DIGITAL_B));
-    // if (master.get_digital_new_press(DIGITAL_L2)) {
-    //   horizontalFlaps.set_value(!horizontalFlapsOut);
-    //   horizontalFlapsOut = !horizontalFlapsOut;
-    // }
-
-    // if (master.get_digital_new_press(DIGITAL_L1)) {
-    //   verticalFlap.set_value(!verticalFlapOut);
-    //   verticalFlapOut = !verticalFlapOut;
-    // }
 
     pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!
                                        // Keep this ez::util::DELAY_TIME

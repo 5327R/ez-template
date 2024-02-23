@@ -71,9 +71,7 @@ void disabled(void);
 void competition_initialize(void);
 void opcontrol(void);
 void testAuton(void);
-void descore(void);
-void oppton_noflaps(void);
-void nakulton(void);
+void skills(void);
 #ifdef __cplusplus
 }
 #endif
