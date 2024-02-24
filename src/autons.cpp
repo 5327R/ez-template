@@ -68,44 +68,94 @@ void default_constants() {
 
 // Custom Autons
 // ---------------------------------------------------------------------------------------------------------------------
-void testAuton() { dr(TILE * 2); }
+void testAuton() { dr_s(TILE * 2, 100); }
 
 void skills() {
-  chassis.drive_brake_set(pros::E_MOTOR_BRAKE_COAST);
-  chassis.drive_angle_set(-180);
+  // STEP 1
+  // ------------------------------------------------------------------------------------------
+  //  chassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD);
+  //  chassis.drive_angle_set(-180);
 
-  chassis.pid_swing_set(e_swing::RIGHT_SWING, -135, 90, 0);
-  chassis.pid_wait();
-  chassis.pid_swing_set(e_swing::LEFT_SWING, -180, 127,
-                        77); // rams both alliance into enemy goal
-  chassis.pid_wait();
-  chassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD);
+  // chassis.pid_swing_set(e_swing::RIGHT_SWING, -135, 90, 0);
+  // chassis.pid_wait();
+  // chassis.pid_swing_set(e_swing::LEFT_SWING, -180, 127,
+  //                       78); // rams both alliance into enemy goal
+  // chassis.pid_wait();
 
-  // turn(-180);
+  // turn(-170);
+  // dr(10);    // drive back after push
+  // turn(-65); // get matchload angle
+  // dr(-6);    // backup and touch bar
 
-  dr(8);
-  turn(-65);
-  dr(-8);
-
-  slapper.move(90);
+  // slapper.move(90); // run slapper
   // delay(1000);
   // slapper.move(0);
 
   // turn(-80);
 
-  // dr(44);
+  // dr(41); // 45
   // turn(-180);
 
   // horizontalFlaps.set(true);
-  // dr(-72); // ram mid balls
+  // delay(500);
+  // turn(-180);
+  // dr_s(-72, 80); // ram mid balls
 
   // horizontalFlaps.set(false);
+  // //
+  // // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+  // // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+  // -- -- -- -- -- -- -- -- -- Checkpoint 1
+  chassis.drive_angle_set(-180);
 
-  // chassis.pid_swing_set(e_swing::LEFT_SWING, -135, 127, 20);
-  // chassis.pid_wait();
+  chassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD);
+  turn(-180);
 
-  // dr(-10);
+  chassis.pid_swing_set(e_swing::LEFT_SWING, -120, 127, 0);
+  chassis.pid_wait();
 
-  // chassis.pid_swing_set(e_swing::LEFT_SWING, -270, 110, 20);
+  dr(-10);
+
+  chassis.pid_swing_set(e_swing::LEFT_SWING, -270, 100, 20);
+  chassis.pid_wait();
+
+  dr_s(-72, 90); // push lane triballs
+
+  turn(-290);
+
+  chassis.pid_swing_set(e_swing::LEFT_SWING, -360, 127,
+                        65); // side push after going through lane
+  chassis.pid_wait();
+
+  dr(-14);
+
+  chassis.pid_swing_set(e_swing::LEFT_SWING, -265, 80,
+                        0); // swing to turn to middle
+  chassis.pid_wait();
+
+  dr(44);
+
+  turn(-315);
+  horizontalFlaps.set(true);
+  delay(500);
+
+  chassis.pid_swing_set(e_swing::RIGHT_SWING, -270, 127, 95); // mid push
+  chassis.pid_wait();
+
+  turn(-270);
+  dr(20); // second push
+  dr(-22);
+
+  horizontalFlaps.set(false);
+
+  dr(28);
+
+  turn(-360);
+  // dr(-34);
+
+  // turn(-225);
+
+  // horizontalFlaps.set(true);
+  // chassis.pid_swing_set(e_swing::LEFT_SWING, -270, 127, 90);
   // chassis.pid_wait();
 }
