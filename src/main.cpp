@@ -177,8 +177,12 @@ void autonomous() {
   // ez::as::auton_selector
   //     .selected_auton_call(); // Calls selected auton from autonomous
 
+  // skills();
+  // friendlyton();
   // testAuton();
-  skills();
+  // descore();
+  oppton_noflaps();
+  // oppton();
 
   std::cout << "Autonomous Has Run\n";
 }
@@ -198,9 +202,8 @@ void autonomous() {
  */
 void opcontrol() {
   // This is preference to what you like to drive on.
-  chassis.drive_brake_set(MOTOR_BRAKE_BRAKE);
+  chassis.drive_brake_set(MOTOR_BRAKE_COAST);
   // intake.move(0);
-
   while (true) {
     // chassis.tank(); // Tank control
     chassis.opcontrol_arcade_standard(ez::SPLIT); // Standard split arcade
@@ -214,10 +217,11 @@ void opcontrol() {
       } else {
         intake.move(127);
       }
+     
     }
 
     if (master.get_digital_new_press(DIGITAL_R2)) {
-      if (intake.get_target_velocity() < 0) {
+     if (intake.get_target_velocity() < 0) {
         intake.move(0);
       } else {
         intake.move(-127);
@@ -243,3 +247,8 @@ void opcontrol() {
                                        // Keep this ez::util::DELAY_TIME
   }
 }
+
+// void opcontrol() {
+//   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);
+//   autonomous();
+// }

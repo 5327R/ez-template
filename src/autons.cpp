@@ -70,6 +70,174 @@ void default_constants() {
 // ---------------------------------------------------------------------------------------------------------------------
 void testAuton() { dr_s(TILE * 2, 100); }
 
+void descore()
+{
+  verticalFlap.set(true);
+  delay(500);
+  intake.move(127);
+  chassis.pid_turn_set(60, 127); // swings out of start position
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(16, DRIVE_SPEED, true); // drives 18 inches toward goal
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(-10, 100); // lines up with goal to score
+  chassis.pid_wait();
+
+  verticalFlap.set(false);
+
+  chassis.pid_turn_set(30, 127); // lines up with goal to score
+  chassis.pid_wait();
+
+  intake.move(-127);
+  delay(700);
+
+  chassis.pid_drive_set(30, 127, false); // second push
+  chassis.pid_wait();
+
+  chassis.pid_swing_set(ez::LEFT_SWING, 0, 127); // swings out of start position
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-7, 127, false); // second push
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(14, 127, false); // second push
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-10, 127, false); // second push
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(-75, 127); // lines up with goal to score
+  chassis.pid_wait();
+
+  intake.move(0);
+  intake.move(127);
+
+  chassis.pid_drive_set(46, 127, true); // second push
+  chassis.pid_wait();
+
+  chassis.pid_swing_set(ez::LEFT_SWING, 90,
+                        100); // swings out of start position
+  chassis.pid_wait();
+
+  intake.move(-127);
+  chassis.pid_drive_set(36, 127, true); // second push
+  chassis.pid_wait();
+  intake.move(0);
+
+  chassis.pid_drive_set(-20, 127, true); // second push
+  chassis.pid_wait();
+}
+
+void oppton()
+{
+  // intake deployment
+  verticalFlap.set(true);
+  delay(500);
+  verticalFlap.set(false);
+  intake.move(127);
+
+  // 3 tiles forward
+  dr(2 * TILE);
+
+  // turn to opp goal
+  turn(-50);
+
+  // deposit triball in front of opp goal
+  intake.move(-100);
+  delay(700);
+  intake.move(0);
+
+  // grab mid triball
+  intake.move(127);
+  turn_s(90, 80);
+
+  chassis.pid_swing_set(ez::RIGHT_SWING, 0, SWING_SPEED);
+  chassis.pid_wait();
+  delay(100);
+
+  // flaps
+  turn(-90);
+  horizontalFlaps.set(true);
+  dr_s(-0.6 * TILE, 127);
+  // chassis.drive_angle_set(-90);
+  horizontalFlaps.set(false);
+  dr(0.6 * TILE);
+  turn(0);
+
+
+  // descore
+  dr(-0.7 * TILE);
+  
+  chassis.pid_swing_set(ez::RIGHT_SWING, 90, SWING_SPEED, 10);
+  chassis.pid_wait();
+  dr(-1.3 * TILE);
+  turn(180);
+
+  dr(0.5 * TILE);
+
+  verticalFlap.set(true);
+  chassis.pid_swing_set(ez::RIGHT_SWING, 90, 100);
+  chassis.pid_wait();
+  
+  turn(100);
+
+  verticalFlap.set(false);
+  
+  intake.move(-127);
+  dr(39);
+}
+
+
+void oppton_noflaps()
+{
+  // intake deployment
+  verticalFlap.set(true);
+  delay(500);
+  verticalFlap.set(false);
+  intake.move(127);
+
+  // 3 tiles forward
+  dr(2 * TILE);
+
+  // turn to opp goal
+  turn(-50);
+
+  // deposit triball in front of opp goal
+  intake.move(-100);
+  delay(700);
+  intake.move(0);
+
+  // grab mid triball
+  intake.move(127);
+  turn_s(90, 80);
+
+  chassis.pid_swing_set(ez::RIGHT_SWING, 0, SWING_SPEED);
+  chassis.pid_wait();
+  delay(100);
+
+  // descore
+  dr(-0.7 * TILE);
+  
+  chassis.pid_swing_set(ez::RIGHT_SWING, 90, SWING_SPEED, 10);
+  chassis.pid_wait();
+  dr(-1.3 * TILE);
+  turn(180);
+
+  dr(0.5 * TILE);
+
+  verticalFlap.set(true);
+  chassis.pid_swing_set(ez::RIGHT_SWING, 90, 100);
+  chassis.pid_wait();
+  
+  turn(100);
+
+  verticalFlap.set(false);
+  
+  intake.move(-127);
+  dr(30);
+}
+
 void skills() {
   // STEP 1
   // ------------------------------
@@ -88,7 +256,7 @@ void skills() {
   dr(-6);    // backup and touch bar
 
   slapper.move(90); // run slapper
-  delay(1000);
+  delay(25001);
   slapper.move(0);
 
   turn(-80);
@@ -164,4 +332,82 @@ void skills() {
   horizontalFlaps.set(true);
   chassis.pid_swing_set(e_swing::LEFT_SWING, -270, 127, 100);
   chassis.pid_wait();
+}
+
+void friendlyton()
+{
+  // modified_exit_condition();
+  chassis.drive_angle_set(-90);
+  // intake first triball
+  intake.move(127);
+  verticalFlap.set(true);
+  delay(500);
+  verticalFlap.set(false);
+
+  // push matchload to goal
+  dr_s(-28, 80);
+  chassis.pid_swing_set(ez::LEFT_SWING, -120, 110);
+  chassis.pid_wait();
+  dr_s(-26, 100);
+  chassis.pid_swing_set(ez::LEFT_SWING, -180, 110);
+  chassis.pid_wait();
+
+  dr_s(5, 127);
+
+  turn_s(-340, 127);
+
+  intake.move(-127);
+  delay(700);
+  intake.move(0);
+
+  turn_s(-170, 127);
+  dr_s(-18, 127);
+
+  // drive_s(10, 127); //second push
+  // complete();
+
+  // drive_s(-14, 127);
+  // complete();
+
+  chassis.pid_swing_set(ez::LEFT_SWING, -45, 100); // grab md
+  chassis.pid_wait();
+
+  intake.move(127);
+  dr_s(52, 127);
+
+  chassis.pid_swing_set(ez::RIGHT_SWING, -90, 127);
+  chassis.pid_wait();
+
+  dr_s(-12, 127);
+  dr_s(5, 127);
+
+  turn_s(90, 127);
+
+  intake.move(-127);
+  delay(500);
+  dr_s(27, 127);
+
+  delay(100);
+  intake.move(0);
+  dr(-10);
+
+  // swingl_s(-100, 127);
+  // complete();
+
+  // intake.move(127);
+  // drive_s(10, 127);
+  // complete();
+
+  // turn(45);
+  // pros::delay(500);
+  // drive_s(10, 127);
+  // pros::delay(100);
+  // intake.move(-127);
+  // swingl_s(90, 127);
+  // pros::delay(200);
+  // drive_s(24, 127);
+}
+
+void awp() {
+
 }
