@@ -4,11 +4,11 @@
 // For instalattion, upgrading, documentations and tutorials, check out website!
 // https://ez-robotics.github.io/EZ-Template/
 /////
-pros::Motor intake(-10); //
+pros::Motor intake(-19); //
 // pros::ADIDigitalOut verticalFlap('E');
 // pros::ADIDigitalOut horizontalFlaps('F');
-ez::Piston verticalFlap('E');
-ez::Piston horizontalFlaps('F');
+ez::Piston verticalFlap('H');
+ez::Piston horizontalFlaps('B');
 ez::Piston hang('C');
 pros::Motor slapper1(-14);
 pros::Motor slapper2(15);
@@ -21,16 +21,16 @@ bool horizontalFlapsOut = false;
 Drive chassis(
     // Left Chassis Ports (negative port will reverse it!)
     //   the first port is the sensored port (when trackers are not used!)
-    {-9, 3, -8}
+    {-3, 15, -9}
 
     // Right Chassis Ports (negative port will reverse it!)
     //   the first port is the sensored port (when trackers are not used!)
     ,
-    {2, -19, 1}
+    {2, -14, 8}
 
     // IMU Port
     ,
-    18
+    20
 
     // Wheel Diameter (Remember, 4" wheels are actually 4.125!)
     //    (or tracking wheel diameter)

@@ -235,7 +235,7 @@ void oppton_noflaps()
   verticalFlap.set(false);
   
   intake.move(-127);
-  dr(30);
+  dr(37.8);
 }
 
 void skills() {
