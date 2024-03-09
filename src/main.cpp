@@ -13,6 +13,7 @@ pros::Motor intake(-19); //
 ez::Piston verticalFlap('H');
 ez::Piston horizontalFlaps('B');
 ez::Piston hang('C');
+ez::Piston passiveHang('A');
 pros::Motor slapper1(-14);
 pros::Motor slapper2(15);
 pros::MotorGroup slapper({slapper1, slapper2});
@@ -88,7 +89,7 @@ void autonSelectTask()
   }
   pros::delay(100);
   master.clear();
-  master.print(0, 0, "Counter: %d", ez::as::);
+  // master.print(0, 0, "Counter: %d", ez::as::);
 }
 void debugDataTask()
 {
@@ -274,6 +275,7 @@ void opcontrol()
     horizontalFlaps.button_toggle(master.get_digital(DIGITAL_L2));
     verticalFlap.button_toggle(master.get_digital(DIGITAL_L1));
     hang.button_toggle(master.get_digital(DIGITAL_B));
+    passiveHang.button_toggle(master.get_digital(DIGITAL_A));
 
     pros::delay(ez::util::DELAY_TIME); // This is used for timer calculations!
                                        // Keep this ez::util::DELAY_TIME
