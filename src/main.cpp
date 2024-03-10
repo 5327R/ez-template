@@ -10,10 +10,10 @@
 pros::Motor intake(-19); //
 // pros::ADIDigitalOut verticalFlap('E');
 // pros::ADIDigitalOut horizontalFlaps('F');
-ez::Piston verticalFlap('H');
-ez::Piston horizontalFlaps('B');
-ez::Piston hang('C');
-ez::Piston passiveHang('A');
+ez::Piston verticalFlap('E');
+ez::Piston horizontalFlaps('D');
+ez::Piston hang('F');
+ez::Piston passiveHang('C');
 pros::Motor slapper1(-14);
 pros::Motor slapper2(15);
 pros::MotorGroup slapper({slapper1, slapper2});
