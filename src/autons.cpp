@@ -1,4 +1,5 @@
 #include "autons.hpp"
+#include "EZ-Template/util.hpp"
 #include "main.h"
 #include "pros/motors.h"
 
@@ -26,6 +27,16 @@
     chassis.pid_turn_set(x, y, false);                                         \
     chassis.pid_wait();                                                        \
   } while (0)
+#define swing_r(x, y, z)                                                       \
+  do {                                                                         \
+    chassis.pid_swing_set(ez::RIGHT_SWING, x, y, z);                           \
+    chassis.pid_wait();                                                        \
+  } while (0)
+#define swing_l(x, y, z)                                                       \
+  do {                                                                         \
+    chassis.pid_swing_set(ez::LEFT_SWING, x, y, z);                            \
+    chassis.pid_wait();                                                        \
+  } while (0)
 #define TILE 24
 
 /////
@@ -51,10 +62,10 @@ const int SWING_SPEED = 90;
 // doesn't change much, then there isn't a concern here.
 
 void default_constants() {
-  chassis.pid_heading_constants_set(3, 0, 20);
+  chassis.pid_heading_constants_set(7, 0, 45);
   chassis.pid_drive_constants_set(12, 0, 60);
   chassis.pid_turn_constants_set(5, 0, 40);
-  chassis.pid_swing_constants_set(5, 0, 40);
+  chassis.pid_swing_constants_set(5, 0, 45);
 
   chassis.pid_turn_exit_condition_set(100_ms, 2_deg, 250_ms, 5_deg, 750_ms,
                                       750_ms);
@@ -68,13 +79,18 @@ void default_constants() {
 
 // Custom Autons
 // ---------------------------------------------------------------------------------------------------------------------
-void testAuton() {
-  dr_s(TILE * 1, 127);
-  delay(500);
-  dr_s(TILE * -1, 127);
-}
+void testAuton() { swing_l(90, 100, 0); }
 
 void descore() {
+  verticalFlap.set(true);
+  delay(500);
+  intake.move(127);
+  chassis.pid_swing_set(ez::LEFT_SWING, 60, SWING_SPEED);
+
+  chassis.pid_wait();
+}
+
+void descore_old() {
   verticalFlap.set(true);
   delay(500);
   intake.move(127);
