@@ -4,38 +4,44 @@
 #include "pros/motors.h"
 
 #define delay(x) pros::delay(x);
-#define dr_s(x, y)                                                             \
-  do {                                                                         \
-    chassis.pid_drive_set(x, y, false);                                        \
-    chassis.pid_wait();                                                        \
+#define dr_s(x, y)                      \
+  do                                    \
+  {                                     \
+    chassis.pid_drive_set(x, y, false); \
+    chassis.pid_wait();                 \
   } while (0)
 
-#define dr(x)                                                                  \
-  do {                                                                         \
-    chassis.pid_drive_set(x, 127, false);                                      \
-    chassis.pid_wait();                                                        \
+#define dr(x)                             \
+  do                                      \
+  {                                       \
+    chassis.pid_drive_set(x, 127, false); \
+    chassis.pid_wait();                   \
   } while (0)
 
-#define turn(x)                                                                \
-  do {                                                                         \
-    chassis.pid_turn_set(x, 127, false);                                       \
-    chassis.pid_wait();                                                        \
+#define turn(x)                          \
+  do                                     \
+  {                                      \
+    chassis.pid_turn_set(x, 127, false); \
+    chassis.pid_wait();                  \
   } while (0)
 
-#define turn_s(x, y)                                                           \
-  do {                                                                         \
-    chassis.pid_turn_set(x, y, false);                                         \
-    chassis.pid_wait();                                                        \
+#define turn_s(x, y)                   \
+  do                                   \
+  {                                    \
+    chassis.pid_turn_set(x, y, false); \
+    chassis.pid_wait();                \
   } while (0)
-#define swing_r(x, y, z)                                                       \
-  do {                                                                         \
-    chassis.pid_swing_set(ez::RIGHT_SWING, x, y, z);                           \
-    chassis.pid_wait();                                                        \
+#define swing_r(x, y, z)                                    \
+  do                                                        \
+  {                                                         \
+    chassis.pid_swing_set(ez::RIGHT_SWING, x, y, z, false); \
+    chassis.pid_wait();                                     \
   } while (0)
-#define swing_l(x, y, z)                                                       \
-  do {                                                                         \
-    chassis.pid_swing_set(ez::LEFT_SWING, x, y, z);                            \
-    chassis.pid_wait();                                                        \
+#define swing_l(x, y, z)                                   \
+  do                                                       \
+  {                                                        \
+    chassis.pid_swing_set(ez::LEFT_SWING, x, y, z, false); \
+    chassis.pid_wait();                                    \
   } while (0)
 #define TILE 24
 
@@ -61,17 +67,18 @@ const int SWING_SPEED = 90;
 // game objects, or with lifts up vs down. If the objects are light or the cog
 // doesn't change much, then there isn't a concern here.
 
-void default_constants() {
+void default_constants()
+{
   chassis.pid_heading_constants_set(7, 0, 45);
   chassis.pid_drive_constants_set(12, 0, 60);
   chassis.pid_turn_constants_set(5, 0, 40);
-  chassis.pid_swing_constants_set(5, 0, 45);
+  chassis.pid_swing_constants_set(5, 0, 47);
 
-  chassis.pid_turn_exit_condition_set(100_ms, 2_deg, 250_ms, 5_deg, 750_ms,
+  chassis.pid_turn_exit_condition_set(10_ms, 2_deg, 250_ms, 5_deg, 500_ms,
                                       750_ms);
-  chassis.pid_swing_exit_condition_set(100_ms, 3_deg, 250_ms, 5_deg, 750_ms,
+  chassis.pid_swing_exit_condition_set(10_ms, 2_deg, 250_ms, 5_deg, 500_ms,
                                        750_ms);
-  chassis.pid_drive_exit_condition_set(80_ms, 1_in, 300_ms, 2_in, 500_ms,
+  chassis.pid_drive_exit_condition_set(10_ms, 1_in, 300_ms, 2_in, 350_ms,
                                        500_ms);
 
   chassis.slew_drive_constants_set(7_in, 80);
@@ -79,9 +86,13 @@ void default_constants() {
 
 // Custom Autons
 // ---------------------------------------------------------------------------------------------------------------------
-void testAuton() { swing_l(90, 100, 0); }
+void testAuton()
+{
+  swing_l(15, 127, 0);
+}
 
-void descore() {
+void descore()
+{
   verticalFlap.set(true);
   delay(500);
   intake.move(127);
@@ -90,7 +101,8 @@ void descore() {
   chassis.pid_wait();
 }
 
-void descore_old() {
+void descore_old()
+{
   verticalFlap.set(true);
   delay(500);
   intake.move(127);
@@ -148,7 +160,8 @@ void descore_old() {
   chassis.pid_wait();
 }
 
-void oppton() {
+void oppton()
+{
   // intake deployment
   verticalFlap.set(true);
   delay(500);
@@ -205,7 +218,8 @@ void oppton() {
   dr(39);
 }
 
-void oppton_noflaps() {
+void oppton_noflaps()
+{
   // intake deployment
   verticalFlap.set(true);
   delay(500);
@@ -253,7 +267,8 @@ void oppton_noflaps() {
   dr(37.8);
 }
 
-void skills() {
+void skills()
+{
   // STEP 1
   // ------------------------------
   chassis.drive_brake_set(pros::E_MOTOR_BRAKE_HOLD);
@@ -271,7 +286,7 @@ void skills() {
   dr(-6);    // backup and touch bar
 
   slapper.move(90); // run slapper
-  delay(25001);
+  delay(1000);
   slapper.move(0);
 
   turn(-80);
@@ -349,7 +364,8 @@ void skills() {
   chassis.pid_wait();
 }
 
-void friendlyton() {
+void friendlyton_OLD()
+{
   // modified_exit_condition();
   chassis.drive_angle_set(-90);
   // intake first triball
@@ -422,4 +438,68 @@ void friendlyton() {
   // drive_s(24, 127);
 }
 
-void awp() {}
+void friendlyton()
+{
+  verticalFlap.set(true);
+  delay(250);
+  verticalFlap.set(false);
+
+  chassis.drive_angle_set(-15);
+
+  intake.move(127);
+  dr(54);
+
+  delay(200);
+
+  dr(-30);
+  turn(75);
+  intake.move(-127);
+  delay(300);
+  intake.move(0);
+
+  turn(0);
+  dr(-20);
+
+  turn(-90);
+  intake.move(127);
+  dr(28);
+  delay(100);
+  dr(-34);
+
+  verticalFlap.set(true);
+  turn(60);
+  dr(16);
+  turn_s(0, 90);
+  verticalFlap.set(false);
+  turn(60);
+  chassis.pid_swing_set(RIGHT_SWING, 0, 127, 20, false);
+  delay(250);
+
+  intake.move(-127);
+
+  chassis.drive_set(127, 127);
+  delay(750);
+  chassis.drive_set(0, 0);
+  intake.move(0);
+
+  swing_l(-70, 127, 0);
+  intake.move(127);
+  dr(50);
+  swing_l(-270, 127, 0);
+  chassis.drive_set(127, 127);
+  delay(1000);
+  dr(-20);
+}
+
+void close_awp()
+{
+  chassis.drive_angle_set(-45);
+  dr(-15);
+  verticalFlap.set(true);
+  dr(8);
+  turn_s(-110, 127);
+  verticalFlap.set(false);
+  turn(-80);
+  intake.move(-127);
+  dr(38.5);
+}

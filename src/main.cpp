@@ -72,23 +72,32 @@ Drive chassis(
 
 // Game Loop Functions
 // --------------------------------------------------------------------------------------------------------------------------------
-void autonSelectTask() {
-  while (true) {
-    if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+void autonSelectTask()
+{
+
+  master.clear();
+  while (true)
+  {
+    if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_RIGHT))
+    {
       std::cout << "page up\n";
       ez::as::page_up();
     }
-    if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+    if (master.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_LEFT))
+    {
       std::cout << "page down\n";
       ez::as::page_down();
     }
+    pros::delay(100);
+    // master.print(1, 1, "Current Auton: %d", ez::as::auton_selector.return_selected_auton());
+    master.print(0, 0, ez::as::auton_selector.return_selected_auton());
+    std::cout << ez::as::auton_selector.return_selected_auton() << "\n";
   }
-  pros::delay(100);
-  master.clear();
-  // master.print(0, 0, "Counter: %d", ez::as::);
 }
-void debugDataTask() {
-  while (true) {
+void debugDataTask()
+{
+  while (true)
+  {
     std::cout << chassis.imu.get_heading() << std::endl;
     pros::delay(100);
   }
@@ -101,7 +110,8 @@ void debugDataTask() {
  * to keep execution time for this mode under a few seconds.
  */
 // --------------------------------------------------------------------------------------------------------------------------------
-void initialize() {
+void initialize()
+{
   // Print our branding over your terminal :D
   // ez::print_ez_template();
 
@@ -117,8 +127,9 @@ void initialize() {
   chassis.opcontrol_curve_default_set(
       0, 0); // Defaults for curve. If using tank, only the first parameter is
              // used. (Comment this line out if you have an SD card!)
+  chassis.opcontrol_joystick_threshold_set(10);
   default_constants(); // Set the drive to your own constants from autons.cpp!
-  pros::Task controllerAutonSelectTask(autonSelectTask);
+  // pros::Task controllerAutonSelectTask(autonSelectTask);
 
   // These are already defaulted to these buttons, but you can change the
   // left/right curve buttons here! chassis.set_left_curve_buttons
@@ -129,12 +140,8 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      Auton("(friendlyton) right side ABSOLUTE CLASSIC", testAuton),
-      // Auton("(oppsteal) left side (with matchload and push center ball to
-      // other side)", oppsteal), Auton("(oppton) starts on enemy side (match
-      // loads)", oppton), Auton("(ProgSkills) Just runs flywheel the whole
-      // time.", skillsProg),
-
+      Auton("5 ball auton", friendlyton),
+      Auton("close side auton", oppton),
   });
 
   // ez::as::limit_switch_lcd_initialize(&pgUpSwitch, &pgDownSwitch);
@@ -150,7 +157,8 @@ void initialize() {
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {
+void disabled()
+{
   // . . .
 }
 
@@ -163,7 +171,8 @@ void disabled() {
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {
+void competition_initialize()
+{
   // . . .
 }
 
@@ -178,7 +187,8 @@ void competition_initialize() {
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {
+void autonomous()
+{
   chassis.pid_targets_reset();               // Resets PID targets to 0
   chassis.drive_imu_reset();                 // Reset gyro position to 0
   chassis.drive_sensor_reset();              // Reset drive sensors to 0
@@ -189,12 +199,11 @@ void autonomous() {
   /*     .selected_auton_call(); // Calls selected auton from autonomous */
 
   // skills();
-  // friendlyton();
+  friendlyton();
   // testAuton();
   // descore();
   // oppton_noflaps();
-  // oppton();
-  testAuton();
+  // close_awp();
 
   std::cout << "Autonomous Has Run\n";
 }
@@ -212,38 +221,53 @@ void autonomous() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
-void opcontrol() {
+void opcontrol()
+{
   // This is preference to what you like to drive on.
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+
   // intake.move(0);
-  while (true) {
+  while (true)
+  {
     // chassis.tank(); // Tank control
     chassis.opcontrol_arcade_standard(ez::SPLIT); // Standard split arcade
     // chassis.arcade_standard(ez::SINGLE); // Standard single arcade
     // chassis.arcade_flipped(ez::SPLIT); // Flipped split arcade
     // chassis.arcade_flipped(ez::SINGLE); // Flipped single arcade
 
-    if (master.get_digital_new_press(DIGITAL_R1)) {
-      if (intake.get_target_velocity() > 0) {
+    if (master.get_digital_new_press(DIGITAL_R1))
+    {
+      if (intake.get_target_velocity() > 0)
+      {
         intake.move(0);
-      } else {
+      }
+      else
+      {
         intake.move(127);
       }
     }
 
-    if (master.get_digital_new_press(DIGITAL_R2)) {
-      if (intake.get_target_velocity() < 0) {
+    if (master.get_digital_new_press(DIGITAL_R2))
+    {
+      if (intake.get_target_velocity() < 0)
+      {
         intake.move(0);
-      } else {
+      }
+      else
+      {
         intake.move(-127);
       }
     }
 
-    if (master.get_digital_new_press(DIGITAL_Y)) {
-      if (slapperOn) {
+    if (master.get_digital_new_press(DIGITAL_Y))
+    {
+      if (slapperOn)
+      {
         slapper.move(0);
         slapperOn = false;
-      } else {
+      }
+      else
+      {
         slapper.move(90);
         slapperOn = true;
       }
