@@ -16,3 +16,4 @@ temp.errors
 # everything else
 .*
 !.gitignore
+!.git/
