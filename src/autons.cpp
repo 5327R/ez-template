@@ -52,7 +52,7 @@ const int SWING_SPEED = 90;
 
 void default_constants() {
   chassis.pid_heading_constants_set(3, 0, 20);
-  chassis.pid_drive_constants_set(12, 0, 20);
+  chassis.pid_drive_constants_set(12, 0, 60);
   chassis.pid_turn_constants_set(5, 0, 40);
   chassis.pid_swing_constants_set(5, 0, 40);
 
@@ -68,10 +68,13 @@ void default_constants() {
 
 // Custom Autons
 // ---------------------------------------------------------------------------------------------------------------------
-void testAuton() { dr_s(TILE * 2, 100); }
+void testAuton() {
+  dr_s(TILE * 1, 127);
+  delay(500);
+  dr_s(TILE * -1, 127);
+}
 
-void descore()
-{
+void descore() {
   verticalFlap.set(true);
   delay(500);
   intake.move(127);
@@ -129,8 +132,7 @@ void descore()
   chassis.pid_wait();
 }
 
-void oppton()
-{
+void oppton() {
   // intake deployment
   verticalFlap.set(true);
   delay(500);
@@ -165,10 +167,9 @@ void oppton()
   dr(0.6 * TILE);
   turn(0);
 
-
   // descore
   dr(-0.7 * TILE);
-  
+
   chassis.pid_swing_set(ez::RIGHT_SWING, 90, SWING_SPEED, 10);
   chassis.pid_wait();
   dr(-1.3 * TILE);
@@ -179,18 +180,16 @@ void oppton()
   verticalFlap.set(true);
   chassis.pid_swing_set(ez::RIGHT_SWING, 90, 100);
   chassis.pid_wait();
-  
+
   turn(100);
 
   verticalFlap.set(false);
-  
+
   intake.move(-127);
   dr(39);
 }
 
-
-void oppton_noflaps()
-{
+void oppton_noflaps() {
   // intake deployment
   verticalFlap.set(true);
   delay(500);
@@ -218,7 +217,7 @@ void oppton_noflaps()
 
   // descore
   dr(-0.7 * TILE);
-  
+
   chassis.pid_swing_set(ez::RIGHT_SWING, 90, SWING_SPEED, 10);
   chassis.pid_wait();
   dr(-1.3 * TILE);
@@ -229,11 +228,11 @@ void oppton_noflaps()
   verticalFlap.set(true);
   chassis.pid_swing_set(ez::RIGHT_SWING, 90, 100);
   chassis.pid_wait();
-  
+
   turn(100);
 
   verticalFlap.set(false);
-  
+
   intake.move(-127);
   dr(37.8);
 }
@@ -334,8 +333,7 @@ void skills() {
   chassis.pid_wait();
 }
 
-void friendlyton()
-{
+void friendlyton() {
   // modified_exit_condition();
   chassis.drive_angle_set(-90);
   // intake first triball
@@ -408,6 +406,4 @@ void friendlyton()
   // drive_s(24, 127);
 }
 
-void awp() {
-
-}
+void awp() {}
